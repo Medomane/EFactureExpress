@@ -1,0 +1,27 @@
+# .NET ignores
+bin/
+obj/
+**/*.user
+**/*.rsuser
+**/*.suo
+**/*.vscode
+.vs/
+
+# Visual Studio temporary files
+*.dbmdl
+*.log
+*.backup
+*.publishsettings
+
+invoices.csv
+
+# EF Migrations snapshot
+**/Migrations/*.cs
+
+# React/Node ignores
+efacture-ui/node_modules/
+efacture-ui/build/
+efacture-ui/.env
+# Yarn
+efacture-ui/.cache/
+efacture-ui/.pnp.*
