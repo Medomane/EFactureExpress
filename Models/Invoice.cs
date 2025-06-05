@@ -10,6 +10,14 @@
         public decimal VAT { get; set; }
         public decimal Total { get; set; }
 
+        public InvoiceStatus Status { get; set; } = InvoiceStatus.Ready;
+
         public List<InvoiceLine> Lines { get; set; } = new();
+    }
+
+    public enum InvoiceStatus
+    {
+        Ready = 0,
+        Submitted = 1
     }
 }

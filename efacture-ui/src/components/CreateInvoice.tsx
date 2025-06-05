@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { NewInvoice, NewLine } from '../types';
+import { Link } from 'react-router-dom';
 
 interface CreateInvoiceProps {
   onSubmit: (invoice: NewInvoice) => Promise<void>;
+  disabled?: boolean;
 }
 
-const CreateInvoice: React.FC<CreateInvoiceProps> = ({ onSubmit }) => {
+const CreateInvoice: React.FC<CreateInvoiceProps> = ({ onSubmit, disabled = false }) => {
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [date, setDate] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -44,6 +46,8 @@ const CreateInvoice: React.FC<CreateInvoiceProps> = ({ onSubmit }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (disabled) return;
+    
     const { subTotal, vat, total } = computeTotals();
 
     const newInvoice: NewInvoice = {
@@ -53,6 +57,7 @@ const CreateInvoice: React.FC<CreateInvoiceProps> = ({ onSubmit }) => {
       subTotal,
       vat,
       total,
+      status: 0, // 0 = Ready
       lines: lines.map((ln) => ({
         description: ln.description,
         quantity: ln.quantity,

@@ -15,9 +15,38 @@ const Dashboard: React.FC<DashboardProps> = ({
   error,
   onDownloadPdf 
 }) => {
+  // Calculate statistics
   const totalAmount = invoices.reduce((sum, invoice) => sum + invoice.total, 0);
   const averageAmount = invoices.length > 0 ? totalAmount / invoices.length : 0;
-  const recentInvoices = [...invoices].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+  const readyInvoices = invoices.filter(inv => inv.status === 0);
+  const submittedInvoices = invoices.filter(inv => inv.status === 1);
+  const readyAmount = readyInvoices.reduce((sum, inv) => sum + inv.total, 0);
+  const submittedAmount = submittedInvoices.reduce((sum, inv) => sum + inv.total, 0);
+
+  // Get monthly statistics
+  const monthlyStats = invoices.reduce((acc, invoice) => {
+    const month = new Date(invoice.date).toLocaleString('default', { month: 'long' });
+    if (!acc[month]) {
+      acc[month] = { count: 0, amount: 0 };
+    }
+    acc[month].count++;
+    acc[month].amount += invoice.total;
+    return acc;
+  }, {} as Record<string, { count: number; amount: number }>);
+
+  // Get top customers
+  const customerStats = invoices.reduce((acc, invoice) => {
+    if (!acc[invoice.customerName]) {
+      acc[invoice.customerName] = { count: 0, amount: 0 };
+    }
+    acc[invoice.customerName].count++;
+    acc[invoice.customerName].amount += invoice.total;
+    return acc;
+  }, {} as Record<string, { count: number; amount: number }>);
+
+  const topCustomers = Object.entries(customerStats)
+    .sort(([, a], [, b]) => b.amount - a.amount)
+    .slice(0, 5);
 
   if (loading) {
     return (
@@ -51,67 +80,118 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Invoices</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{invoices.length}</p>
-            </div>
-            <div className="bg-blue-50 p-3 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      {/* Status Overview Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center">
+            <div className="p-3 rounded-full bg-blue-50 text-blue-600">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-          </div>
-          <div className="mt-4">
-            <span className="text-sm text-gray-500">Active invoices in the system</span>
+            <div className="ml-4">
+              <h2 className="text-sm font-medium text-gray-600">Total Invoices</h2>
+              <p className="text-2xl font-semibold text-gray-900">{invoices.length}</p>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Amount</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totalAmount)}
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center">
+            <div className="p-3 rounded-full bg-green-50 text-green-600">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <h2 className="text-sm font-medium text-gray-600">Submitted</h2>
+              <p className="text-2xl font-semibold text-gray-900">{submittedInvoices.length}</p>
+              <p className="text-sm text-gray-500">
+                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(submittedAmount)}
               </p>
             </div>
-            <div className="bg-green-50 p-3 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center">
+            <div className="p-3 rounded-full bg-yellow-50 text-yellow-600">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <h2 className="text-sm font-medium text-gray-600">Ready</h2>
+              <p className="text-2xl font-semibold text-gray-900">{readyInvoices.length}</p>
+              <p className="text-sm text-gray-500">
+                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(readyAmount)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center">
+            <div className="p-3 rounded-full bg-purple-50 text-purple-600">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-          </div>
-          <div className="mt-4">
-            <span className="text-sm text-gray-500">Total value of all invoices</span>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Average Invoice</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(averageAmount)}
+            <div className="ml-4">
+              <h2 className="text-sm font-medium text-gray-600">Average Amount</h2>
+              <p className="text-2xl font-semibold text-gray-900">
+                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(averageAmount)}
               </p>
             </div>
-            <div className="bg-purple-50 p-3 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
           </div>
-          <div className="mt-4">
-            <span className="text-sm text-gray-500">Average value per invoice</span>
+        </div>
+      </div>
+
+      {/* Monthly Statistics */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-medium text-gray-900">Monthly Statistics</h2>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Object.entries(monthlyStats).map(([month, stats]) => (
+              <div key={month} className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-sm font-medium text-gray-600">{month}</h3>
+                <p className="text-lg font-semibold text-gray-900">{stats.count} invoices</p>
+                <p className="text-sm text-gray-500">
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(stats.amount)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Top Customers */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-medium text-gray-900">Top Customers</h2>
+        </div>
+        <div className="p-6">
+          <div className="space-y-4">
+            {topCustomers.map(([customer, stats]) => (
+              <div key={customer} className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900">{customer}</h3>
+                  <p className="text-sm text-gray-500">{stats.count} invoices</p>
+                </div>
+                <p className="text-sm font-medium text-gray-900">
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(stats.amount)}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Recent Invoices */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100">
-        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
           <h2 className="text-lg font-medium text-gray-900">Recent Invoices</h2>
           <Link 
             to="/invoices" 
@@ -120,8 +200,8 @@ const Dashboard: React.FC<DashboardProps> = ({
             View all invoices →
           </Link>
         </div>
-        <div className="divide-y divide-gray-100">
-          {recentInvoices.map((invoice) => (
+        <div className="divide-y divide-gray-200">
+          {invoices.slice(0, 5).map((invoice) => (
             <div key={invoice.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
               <div className="flex items-center justify-between">
                 <div>
@@ -130,21 +210,10 @@ const Dashboard: React.FC<DashboardProps> = ({
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium text-gray-900">
-                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(invoice.total)}
+                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(invoice.total)}
                   </p>
                   <p className="text-sm text-gray-500">{invoice.customerName}</p>
                 </div>
-                {onDownloadPdf && (
-                  <button
-                    onClick={() => onDownloadPdf(invoice.id)}
-                    className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                    title="Download PDF"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                  </button>
-                )}
               </div>
             </div>
           ))}

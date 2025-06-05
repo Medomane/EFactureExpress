@@ -15,12 +15,27 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using EFacture.API.Validators;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using Serilog;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 
 Settings.License = LicenseType.Community;
+
+
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 
 
@@ -37,6 +52,11 @@ builder.Services.AddCors(options =>
 });
 
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<InvoiceValidator>();
+
+
 
 builder.Services.AddDbContext<EFactureDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -50,7 +70,6 @@ builder.Services.AddControllers().AddJsonOptions(opts =>
 
 
 
-// 1. Add Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
         options.Password.RequireDigit = false;
@@ -61,7 +80,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<EFactureDbContext>()
     .AddDefaultTokenProviders();
 
-// 2. Configure JWT authentication
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 builder.Services.AddAuthentication(options =>
@@ -85,7 +103,6 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddScoped<InvoicePdfService>();
@@ -97,9 +114,34 @@ var app = builder.Build();
 
 
 
+app.UseSerilogRequestLogging();
 
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var errorFeature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        var exception = errorFeature?.Error;
+
+        // 1. Log the exception
+        Log.Error(exception, "Unhandled exception");
+
+        // 2. Return a generic 500 ProblemDetails payload
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+        var problem = new ProblemDetails
+        {
+            Status = StatusCodes.Status500InternalServerError,
+            Title = "An unexpected error occurred."
+        };
+        await context.Response.WriteAsJsonAsync(problem);
+    });
+});
 
 app.UseCors("AllowReactDev");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 using (var scope = app.Services.CreateScope())
@@ -109,19 +151,14 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-
 app.MapGet("/", () => "E-Facture API running ✅");
 
-
-
-// Get all invoices
 app.MapGet("/api/invoices", async (EFactureDbContext db) =>
     await db.Invoices
         .Include(i => i.Lines)
         .ToListAsync()
 ).RequireAuthorization();
 
-// Get invoice by ID
 app.MapGet("/api/invoices/{id:int}", async (int id, EFactureDbContext db) =>
     await db.Invoices
         .Include(i => i.Lines)
@@ -138,26 +175,54 @@ app.MapPost("/api/invoices", async (Invoice newInvoice, EFactureDbContext db, In
     var pdfBytes = await pdfService.GeneratePdfAsync(newInvoice.Id);
     if(pdfBytes != null) await pdfService.UploadPdfToMinioAsync(newInvoice.Id, pdfBytes);
     return Results.Created($"/api/invoices/{newInvoice.Id}", newInvoice);
-}).RequireAuthorization();
+})
+    .AddEndpointFilter<ValidationFilter<Invoice>>()
+    .RequireAuthorization();
 
 app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbContext db, InvoicePdfService pdfService) =>
 {
-    var invoice = await db.Invoices.FindAsync(id);
-    if (invoice is null) return Results.NotFound();
+    var existingInvoice = await db.Invoices
+        .Include(i => i.Lines)
+        .FirstOrDefaultAsync(i => i.Id == id);
+
+    if (existingInvoice is null)
+        return Results.NotFound();
 
     // Update fields
-    invoice.InvoiceNumber = updated.InvoiceNumber;
-    invoice.Date = updated.Date;
-    invoice.CustomerName = updated.CustomerName;
-    invoice.SubTotal = updated.SubTotal;
-    invoice.VAT = updated.VAT;
-    invoice.Total = updated.Total;
+    existingInvoice.InvoiceNumber = updated.InvoiceNumber;
+    existingInvoice.Date = updated.Date;
+    existingInvoice.CustomerName = updated.CustomerName;
+    existingInvoice.SubTotal = updated.SubTotal;
+    existingInvoice.VAT = updated.VAT;
+    existingInvoice.Total = updated.Total;
+
+    if (existingInvoice.Lines.Any())
+    {
+        db.InvoiceLines.RemoveRange(existingInvoice.Lines);
+        existingInvoice.Lines.Clear();
+    }
+    foreach (var incomingLine in updated.Lines)
+    {
+        var newLine = new InvoiceLine
+        {
+            Description = incomingLine.Description,
+            Quantity = incomingLine.Quantity,
+            UnitPrice = incomingLine.UnitPrice
+        };
+        existingInvoice.Lines.Add(newLine);
+    }
+
+    /*invoice.SubTotal = invoice.Lines.Sum(l => l.Quantity * l.UnitPrice);
+    invoice.VAT = Math.Round(invoice.SubTotal * 0.2m, 2);
+    invoice.Total = invoice.SubTotal + invoice.VAT;*/
 
     await db.SaveChangesAsync();
-    var pdfBytes = await pdfService.GeneratePdfAsync(invoice.Id);
-    if (pdfBytes != null) await pdfService.UploadPdfToMinioAsync(invoice.Id, pdfBytes);
+    var pdfBytes = await pdfService.GeneratePdfAsync(existingInvoice.Id);
+    if (pdfBytes != null) await pdfService.UploadPdfToMinioAsync(existingInvoice.Id, pdfBytes);
     return Results.NoContent();
-}).RequireAuthorization();
+})
+    .AddEndpointFilter<ValidationFilter<Invoice>>()
+    .RequireAuthorization();
 
 app.MapDelete("/api/invoices/{id:int}", async (int id, EFactureDbContext db) =>
 {
@@ -265,9 +330,15 @@ app.MapGet("/api/invoices/{id:int}/pdf-url", async (int id, IConfiguration confi
     }
 }).RequireAuthorization();
 
+app.MapPost("/api/invoices/{id:int}/submit", async (int id, EFactureDbContext db) =>
+{
+    var invoice = await db.Invoices.FindAsync(id);
+    if (invoice is null) return Results.NotFound();
+    invoice.Status = InvoiceStatus.Submitted;
+    await db.SaveChangesAsync();
+    return Results.Ok(invoice);
+}).RequireAuthorization();
 
-
-// Register endpoint
 app.MapPost("/api/auth/register", async (UserManager<ApplicationUser> userManager, RegisterModel model) =>
 {
     var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -277,7 +348,6 @@ app.MapPost("/api/auth/register", async (UserManager<ApplicationUser> userManage
         : Results.BadRequest(result.Errors);
 });
 
-// Login endpoint
 app.MapPost("/api/auth/login", async (UserManager<ApplicationUser> userManager, IConfiguration config, LoginModel model) =>
 {
     var user = await userManager.FindByEmailAsync(model.Email);
@@ -302,6 +372,7 @@ app.MapPost("/api/auth/login", async (UserManager<ApplicationUser> userManager, 
 .Accepts<LoginModel>("application/json")
 .Produces(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status401Unauthorized);
+
 
 
 app.MapControllers();
