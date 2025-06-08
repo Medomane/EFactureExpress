@@ -6,7 +6,9 @@ import InvoiceList from "./components/InvoiceList";
 import CreateInvoice from "./components/CreateInvoice";
 import ImportCSV from "./components/ImportCSV";
 import InvoiceForm from "./components/InvoiceForm";
+import LoginPage from "./components/LoginPage";
 import { API_ENDPOINTS } from "./config/api";
+import { APP_CONFIG } from "./config/app";
 import { Toaster, toast } from 'react-hot-toast';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorPage from './components/ErrorPage';
@@ -33,10 +35,6 @@ function App() {
     }
     return null;
   });
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");
 
   // ─── LISTING STATE ─────────────────────────────────────────────────────────
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -78,26 +76,20 @@ function App() {
   }, [token]);
 
   // ─── HANDLERS ─────────────────────────────────────────────────────────────
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoginError("");
-    try {
-      const response = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  const handleLogin = async (email: string, password: string) => {
+    const response = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-      if (!response.ok) {
-        throw new Error(t('errors.invalidCredentials'));
-      }
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      setToken(data.token);
-    } catch (err) {
-      setLoginError(err instanceof Error ? err.message : t('errors.anErrorOccurred'));
+    if (!response.ok) {
+      throw new Error(t('errors.invalidCredentials'));
     }
+
+    const data = await response.json();
+    localStorage.setItem("token", data.token);
+    setToken(data.token);
   };
 
   const handleLogout = () => {
@@ -264,75 +256,76 @@ function App() {
     }
   };
 
-  // Add language switcher function
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'fr' : 'en';
     i18n.changeLanguage(newLang);
   };
 
-  // ─── AUTH HANDLING ─────────────────────────────────────────────────────────
-  if (!token) {
+  // ─── RENDER NAVBAR ─────────────────────────────────────────────────────────
+  const renderNavbar = () => {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-sm">
-          <div className="flex justify-between items-center">
-            <h2 className="text-center text-3xl font-bold text-gray-900">{t('common.signIn')}</h2>
-            <button
-              onClick={toggleLanguage}
-              className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-            >
-              {i18n.language === 'en' ? 'FR' : 'EN'}
-            </button>
-          </div>
-          <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-            {loginError && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
-                {loginError}
-              </div>
-            )}
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  {t('common.email')}
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+      <nav className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex">
+              <div className="flex-shrink-0 flex items-center">
+                <img
+                  src={APP_CONFIG.logo}
+                  alt={`${APP_CONFIG.title} Logo`}
+                  className="h-8 w-8 mr-2"
                 />
+                <span className="text-xl font-bold text-gray-900">{APP_CONFIG.title}</span>
               </div>
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  {t('common.password')}
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
+              {token && (
+                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                      `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                        isActive
+                          ? "border-blue-500 text-gray-900"
+                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      }`
+                    }
+                  >
+                    {t('common.dashboard')}
+                  </NavLink>
+                  <NavLink
+                    to="/invoices"
+                    className={({ isActive }) =>
+                      `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                        isActive
+                          ? "border-blue-500 text-gray-900"
+                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      }`
+                    }
+                  >
+                    {t('common.invoices')}
+                  </NavLink>
+                </div>
+              )}
             </div>
-            <div>
+            <div className="flex items-center space-x-4">
               <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                onClick={toggleLanguage}
+                className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
               >
-                {t('common.signInButton')}
+                {i18n.language === 'en' ? 'FR' : 'EN'}
               </button>
+              {token && (
+                <button
+                  onClick={handleLogout}
+                  className="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  {t('common.logout')}
+                </button>
+              )}
             </div>
-          </form>
+          </div>
         </div>
-      </div>
+      </nav>
     );
-  }
+  };
 
   // ─── RENDER ─────────────────────────────────────────────────────────────────
   return (
@@ -348,118 +341,81 @@ function App() {
       <BrowserRouter>
         <div className="min-h-screen bg-gray-100">
           <Toaster position="top-right" />
-          <nav className="bg-white shadow-sm">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between h-16">
-                <div className="flex">
-                  <div className="flex-shrink-0 flex items-center">
-                    <img
-                      src="/favicon.png"
-                      alt="EFacture Logo"
-                      className="h-8 w-8 mr-2"
+          {renderNavbar()}
+
+          {!token ? (
+            <LoginPage
+              onLogin={handleLogin}
+              onToggleLanguage={toggleLanguage}
+              currentLanguage={i18n.language}
+            />
+          ) : (
+            <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <Dashboard
+                      invoices={invoices}
+                      loading={loading}
+                      error={error}
+                      onRefresh={fetchInvoices}
                     />
-                    <h1 className="text-xl font-bold text-gray-900">EFacture</h1>
-                  </div>
-                  <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                    <NavLink
-                      to="/"
-                      className={({ isActive }) =>
-                        `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                          isActive
-                            ? 'border-blue-500 text-gray-900'
-                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                        }`
-                      }
-                    >
-                      {t('common.dashboard')}
-                    </NavLink>
-                    <NavLink
-                      to="/invoices"
-                      className={({ isActive }) =>
-                        `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                          isActive
-                            ? 'border-blue-500 text-gray-900'
-                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                        }`
-                      }
-                    >
-                      {t('common.invoices')}
-                    </NavLink>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <button
-                    onClick={toggleLanguage}
-                    className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                  >
-                    {i18n.language === 'en' ? 'FR' : 'EN'}
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    {t('common.logout')}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </nav>
+                  }
+                />
+                <Route
+                  path="/invoices"
+                  element={
+                    <div>
+                      <div className="mb-6 flex items-center justify-between">
+                        <ImportCSV onImport={handleImportCSV} loading={importLoading} />
+                        <button
+                          onClick={() => setShowInvoiceForm(true)}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors ${
+                            importLoading ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
+                          }`}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                          {t('common.newInvoice')}
+                        </button>
+                      </div>
 
-          <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            <Routes>
-              <Route path="/" element={<Dashboard invoices={invoices} loading={loading} error={error} onDownloadPdf={handleDownloadPdf} />} />
-              <Route 
-                path="/invoices" 
-                element={
-                  <div>
-                    <div className="mb-6 flex items-center justify-between">
-                      <ImportCSV onImport={handleImportCSV} loading={importLoading} />
-                      <button
-                        onClick={() => setShowInvoiceForm(true)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors ${
-                          importLoading ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
-                        }`}
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                        </svg>
-                        {t('common.newInvoice')}
-                      </button>
+                      <div className="bg-white rounded-lg border border-gray-200">
+                        <InvoiceList 
+                          invoices={invoices} 
+                          loading={loading} 
+                          error={error} 
+                          onDelete={handleDeleteInvoice}
+                          onDownloadPdf={handleDownloadPdf}
+                          onSubmit={handleSubmitInvoice}
+                          onCreateInvoice={handleCreateInvoice}
+                          onUpdateInvoice={handleUpdateInvoice}
+                          disabled={importLoading}
+                          importLoading={importLoading}
+                          onImportCSV={handleImportCSV}
+                        />
+                      </div>
+
+                      {showInvoiceForm && (
+                        <InvoiceForm
+                          onSubmit={handleCreateInvoice}
+                          onClose={() => setShowInvoiceForm(false)}
+                          disabled={importLoading}
+                        />
+                      )}
                     </div>
-
-                    <div className="bg-white rounded-lg border border-gray-200">
-                      <InvoiceList 
-                        invoices={invoices} 
-                        loading={loading} 
-                        error={error} 
-                        onDelete={handleDeleteInvoice}
-                        onDownloadPdf={handleDownloadPdf}
-                        onSubmit={handleSubmitInvoice}
-                        onCreateInvoice={handleCreateInvoice}
-                        onUpdateInvoice={handleUpdateInvoice}
-                        disabled={importLoading}
-                        importLoading={importLoading}
-                        onImportCSV={handleImportCSV}
-                      />
-                    </div>
-
-                    {showInvoiceForm && (
-                      <InvoiceForm
-                        onSubmit={handleCreateInvoice}
-                        onClose={() => setShowInvoiceForm(false)}
-                        disabled={importLoading}
-                      />
-                    )}
-                  </div>
-                } 
-              />
-              <Route 
-                path="/invoices/create" 
-                element={<CreateInvoice onSubmit={handleCreateInvoice} disabled={importLoading} />} 
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
+                  } 
+                />
+                <Route 
+                  path="/invoices/create" 
+                  element={<CreateInvoice onSubmit={handleCreateInvoice} disabled={importLoading} />} 
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </main>
+          )}
         </div>
       </BrowserRouter>
     </ErrorBoundary>

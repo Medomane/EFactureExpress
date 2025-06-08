@@ -176,8 +176,8 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
 
     const toastId = toast.loading(
       showConfirmDialog.type === 'submit' 
-        ? `Submitting ${showConfirmDialog.count} invoices...`
-        : `Deleting ${showConfirmDialog.count} invoices...`
+        ? t('invoice.bulk.submitting', { count: showConfirmDialog.count })
+        : t('invoice.bulk.deleting', { count: showConfirmDialog.count })
     );
 
     // Close the confirmation dialog immediately
@@ -188,18 +188,21 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
         await Promise.all(
           Array.from(selectedInvoices).map(id => onSubmit(id))
         );
-        toast.success(`Successfully submitted ${showConfirmDialog.count} invoices`, { id: toastId });
+        toast.success(t('success.bulkInvoicesSubmitted', { count: showConfirmDialog.count }), { id: toastId });
       } else {
         await Promise.all(
           Array.from(selectedInvoices).map(id => onDelete(id))
         );
-        toast.success(`Successfully deleted ${showConfirmDialog.count} invoices`, { id: toastId });
+        toast.success(t('success.bulkInvoicesDeleted', { count: showConfirmDialog.count }), { id: toastId });
       }
       setSelectedInvoices(new Set());
       setShowBulkActions(false);
     } catch (error) {
       toast.error(
-        `Failed to ${showConfirmDialog.type} invoices: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        t('errors.bulkActionFailed', { 
+          action: showConfirmDialog.type === 'submit' ? t('invoice.actions.submit') : t('invoice.actions.delete'),
+          error: error instanceof Error ? error.message : t('errors.unknown')
+        }),
         { id: toastId }
       );
     }
@@ -224,13 +227,23 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
   };
 
   const handleDelete = (id: number) => {
-    if (window.confirm('Are you sure you want to delete this invoice? This action cannot be undone.')) {
+    if (window.confirm(t('invoice.confirm.message', { 
+      action: t('invoice.actions.delete'),
+      count: 1,
+      plural: '',
+      warning: t('invoice.confirm.warning')
+    }))) {
       onDelete(id);
     }
   };
 
   const handleSubmit = (id: number) => {
-    if (window.confirm('Are you sure you want to submit this invoice? Once submitted, it cannot be edited.')) {
+    if (window.confirm(t('invoice.confirm.message', { 
+      action: t('invoice.actions.submit'),
+      count: 1,
+      plural: '',
+      warning: ''
+    }))) {
       onSubmit(id);
     }
   };
