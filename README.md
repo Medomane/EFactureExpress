@@ -42,3 +42,9 @@ Once the containers are running:
 - API: [http://localhost:5000](http://localhost:5000)
 
 You're ready to start invoicing!
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
