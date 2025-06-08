@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NewInvoice, NewLine, Invoice } from '../types';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 interface InvoiceFormProps {
   onSubmit: (invoice: NewInvoice) => Promise<void>;
@@ -22,6 +23,7 @@ interface BackendErrorResponse {
 }
 
 const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, disabled = false }) => {
+  const { t, i18n } = useTranslation();
   const [invoiceNumber, setInvoiceNumber] = useState(invoice?.invoiceNumber || "");
   const [date, setDate] = useState(invoice?.date || new Date().toISOString().split('T')[0]);
   const [customerName, setCustomerName] = useState(invoice?.customerName || "");
@@ -58,22 +60,22 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
 
     // Validate invoice number
     if (!invoiceNumber.trim()) {
-      newErrors.invoiceNumber = "Invoice number is required";
+      newErrors.invoiceNumber = t('invoice.form.errors.invoiceNumberRequired');
     }
 
     // Validate date
     if (!date) {
-      newErrors.date = "Date is required";
+      newErrors.date = t('invoice.form.errors.dateRequired');
     }
 
     // Validate customer name
     if (!customerName.trim()) {
-      newErrors.customerName = "Customer name is required";
+      newErrors.customerName = t('invoice.form.errors.customerNameRequired');
     }
 
     // Validate VAT rate
     if (vatRate < 0 || vatRate > 100) {
-      newErrors.vatRate = "VAT rate must be between 0 and 100";
+      newErrors.vatRate = t('invoice.form.errors.vatRateRange');
     }
 
     // Validate lines
@@ -84,15 +86,15 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
       const lineError: { description?: string; quantity?: string; unitPrice?: string } = {};
 
       if (!line.description.trim()) {
-        lineError.description = "Description is required";
+        lineError.description = t('invoice.form.errors.descriptionRequired');
       }
 
       if (line.quantity <= 0) {
-        lineError.quantity = "Quantity must be greater than 0";
+        lineError.quantity = t('invoice.form.errors.quantityPositive');
       }
 
       if (line.unitPrice < 0) {
-        lineError.unitPrice = "Unit price cannot be negative";
+        lineError.unitPrice = t('invoice.form.errors.unitPricePositive');
       }
 
       if (Object.keys(lineError).length > 0) {
@@ -103,7 +105,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
     });
 
     if (!hasValidLine) {
-      newErrors.lines = { 0: { description: "At least one valid line is required" } };
+      newErrors.lines = { 0: { description: t('invoice.form.errors.oneLineRequired') } };
     } else if (Object.keys(lineErrors).length > 0) {
       newErrors.lines = lineErrors;
     }
@@ -148,7 +150,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
 
   const removeLine = (index: number) => {
     if (lines.length <= 1) {
-      toast.error("Cannot remove the last line");
+      toast.error(t('invoice.form.errors.cannotRemoveLastLine'));
       return;
     }
     setLines((prev) => prev.filter((_, i) => i !== index));
@@ -217,7 +219,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
     if (disabled || isSubmitting) return;
 
     if (!validateForm()) {
-      toast.error("Please fix the errors in the form");
+      toast.error(t('invoice.form.errors.fixErrors'));
       return;
     }
 
@@ -244,25 +246,27 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
       };
 
       await onSubmit(newInvoice);
-      // Only close the form if submission was successful
       onClose();
     } catch (error: any) {
       console.error('Form submission error:', error);
-
       if (error.errors) {
-        // Store the raw error messages from the backend
         setBackendErrors(error.errors as BackendErrorResponse);
-        toast.error("There was an error submitting the form. Please check the highlighted fields.");
+        toast.error(t('invoice.form.errors.submissionError'));
       } else if (error.title) {
         toast.error(error.title);
       } else if (error.message) {
         toast.error(error.message);
       } else {
-        toast.error("Failed to save invoice. Please try again.");
+        toast.error(t('invoice.form.errors.saveFailed'));
       }
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const formatCurrency = (amount: number) => {
+    const locale = i18n.language === 'fr' ? 'fr-MA' : 'en-US';
+    return new Intl.NumberFormat(locale, { style: 'currency', currency: 'MAD' }).format(amount);
   };
 
   return (
@@ -270,7 +274,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
       <div className="bg-white rounded-lg max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-gray-800">
-            {invoice ? 'Edit Invoice' : 'Create New Invoice'}
+            {invoice ? t('invoice.form.editTitle') : t('invoice.form.createTitle')}
           </h2>
           <button
             onClick={onClose}
@@ -286,7 +290,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-4 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm text-gray-600 mb-1">Invoice Number</label>
+              <label className="block text-sm text-gray-600 mb-1">{t('invoice.form.invoiceNumber')}</label>
               <input
                 type="text"
                 value={invoiceNumber}
@@ -310,7 +314,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
               )}
             </div>
             <div className="col-span-2">
-              <label className="block text-sm text-gray-600 mb-1">Date</label>
+              <label className="block text-sm text-gray-600 mb-1">{t('invoice.form.date')}</label>
               <input
                 type="date"
                 value={date}
@@ -334,7 +338,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
               )}
             </div>
             <div className="col-span-2">
-              <label className="block text-sm text-gray-600 mb-1">Customer Name</label>
+              <label className="block text-sm text-gray-600 mb-1">{t('invoice.form.customerName')}</label>
               <input
                 type="text"
                 value={customerName}
@@ -358,7 +362,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
               )}
             </div>
             <div className="col-span-2">
-              <label className="block text-sm text-gray-600 mb-1">VAT Rate (%)</label>
+              <label className="block text-sm text-gray-600 mb-1">{t('invoice.form.vatRate')}</label>
               <input
                 type="number"
                 value={vatRate}
@@ -388,14 +392,14 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
 
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium text-gray-800">Invoice Lines</h3>
+              <h3 className="text-lg font-medium text-gray-800">{t('invoice.form.linesTitle')}</h3>
               <button
                 type="button"
                 onClick={addLine}
                 className="text-blue-600 hover:text-blue-700 font-medium"
                 disabled={disabled || isSubmitting}
               >
-                + Add Line
+                {t('invoice.form.addLine')}
               </button>
             </div>
 
@@ -413,7 +417,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
                   return (
                     <>
                       <div className="col-span-6">
-                        <label className="block text-sm text-gray-600 mb-1">Description</label>
+                        <label className="block text-sm text-gray-600 mb-1">{t('invoice.form.description')}</label>
                         <input
                           type="text"
                           value={ln.description}
@@ -433,7 +437,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
                       </div>
 
                       <div className="col-span-2">
-                        <label className="block text-sm text-gray-600 mb-1">Quantity</label>
+                        <label className="block text-sm text-gray-600 mb-1">{t('invoice.form.quantity')}</label>
                         <input
                           type="number"
                           value={ln.quantity}
@@ -454,7 +458,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
                       </div>
 
                       <div className="col-span-3">
-                        <label className="block text-sm text-gray-600 mb-1">Unit Price</label>
+                        <label className="block text-sm text-gray-600 mb-1">{t('invoice.form.unitPrice')}</label>
                         <input
                           type="number"
                           value={ln.unitPrice}
@@ -482,7 +486,6 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
                           className="w-full px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                           disabled={disabled || isSubmitting || lines.length === 1}
                         >
-                          
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
@@ -499,16 +502,16 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
               <div className="flex justify-end space-y-2">
                 <div className="w-64">
                   <div className="flex justify-between text-sm text-gray-600 mb-2">
-                    <span>Subtotal:</span>
-                    <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(computeTotals().subTotal)}</span>
+                    <span>{t('invoice.form.subtotal')}:</span>
+                    <span>{formatCurrency(computeTotals().subTotal)}</span>
                   </div>
                   <div className="flex justify-between text-sm text-gray-600 mb-2">
-                    <span>VAT ({vatRate}%):</span>
-                    <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(computeTotals().vat)}</span>
+                    <span>{t('invoice.form.vat', { rate: vatRate })}:</span>
+                    <span>{formatCurrency(computeTotals().vat)}</span>
                   </div>
                   <div className="flex justify-between text-base font-medium text-gray-900">
-                    <span>Total:</span>
-                    <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(computeTotals().total)}</span>
+                    <span>{t('invoice.form.total')}:</span>
+                    <span>{formatCurrency(computeTotals().total)}</span>
                   </div>
                 </div>
               </div>
@@ -522,7 +525,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               disabled={isSubmitting}
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type="submit"
@@ -531,7 +534,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
               }`}
               disabled={disabled || isSubmitting}
             >
-              {isSubmitting ? 'Saving...' : (invoice ? 'Save Changes' : 'Create Invoice')}
+              {isSubmitting ? t('common.saving') : (invoice ? t('common.saveChanges') : t('common.createInvoice'))}
             </button>
           </div>
         </form>
