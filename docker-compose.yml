@@ -29,3 +29,12 @@ services:
             Minio__AccessKey: efadmin
             Minio__SecretKey: efpassword123
             Minio__BucketName: efacture
+
+    frontend:
+        build:
+            context: ./efacture-ui
+            dockerfile: Dockerfile
+        depends_on:
+            - webapi
+        ports:
+            - "3000:80"
