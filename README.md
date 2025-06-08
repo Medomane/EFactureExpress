@@ -34,3 +34,11 @@ This MVP provides a full-stack implementation with a .NET 8 Web API, React front
 git clone https://github.com/your-org/efacture-express.git
 cd efacture-express
 docker compose up -d --build
+```
+
+Once the containers are running:
+
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- API: [http://localhost:5000](http://localhost:5000)
+
+You're ready to start invoicing!
