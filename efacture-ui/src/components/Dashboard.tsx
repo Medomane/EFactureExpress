@@ -7,14 +7,14 @@ interface DashboardProps {
   invoices: Invoice[];
   loading: boolean;
   error: string;
-  onDownloadPdf?: (id: number) => void;
+  onRefresh: () => Promise<void>;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ 
   invoices, 
   loading, 
   error,
-  onDownloadPdf 
+  onRefresh
 }) => {
   const { t, i18n } = useTranslation();
 
@@ -81,7 +81,10 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-600">
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-600 flex items-center gap-2">
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
         {error}
       </div>
     );
@@ -90,12 +93,18 @@ const Dashboard: React.FC<DashboardProps> = ({
   if (invoices.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="bg-gray-50 rounded-lg p-8 max-w-md mx-auto">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="bg-white rounded-lg p-8 max-w-md mx-auto shadow-sm border border-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">{t('dashboard.noInvoices')}</h3>
-          <p className="text-gray-500">{t('dashboard.getStarted')}</p>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('dashboard.noInvoices')}</h3>
+          <p className="text-gray-500 mb-6">{t('dashboard.getStarted')}</p>
+          <Link
+            to="/invoices"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+          >
+            {t('common.createInvoice')}
+          </Link>
         </div>
       </div>
     );
@@ -103,9 +112,29 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            {t('dashboard.title')}
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            {t('dashboard.welcome')}
+          </p>
+        </div>
+        <button
+          onClick={onRefresh}
+          className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+        >
+          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          {t('common.refresh')}
+        </button>
+      </div>
+
       {/* Status Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-blue-50 text-blue-600">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,11 +144,14 @@ const Dashboard: React.FC<DashboardProps> = ({
             <div className="ml-4">
               <h2 className="text-sm font-medium text-gray-600">{t('dashboard.totalInvoices')}</h2>
               <p className="text-2xl font-semibold text-gray-900">{invoices.length}</p>
+              <p className="text-sm text-gray-500">
+                {formatCurrency(totalAmount)}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-green-50 text-green-600">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +168,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-yellow-50 text-yellow-600">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,7 +185,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-purple-50 text-purple-600">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,14 +203,14 @@ const Dashboard: React.FC<DashboardProps> = ({
       </div>
 
       {/* Monthly Statistics */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-medium text-gray-900">{t('dashboard.monthlyStats')}</h2>
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {Object.entries(monthlyStats).map(([month, stats]) => (
-              <div key={month} className="bg-gray-50 rounded-lg p-4">
+              <div key={month} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-200">
                 <h3 className="text-sm font-medium text-gray-600">{month}</h3>
                 <p className="text-lg font-semibold text-gray-900">{stats.count} {t('common.invoices')}</p>
                 <p className="text-sm text-gray-500">
@@ -191,17 +223,22 @@ const Dashboard: React.FC<DashboardProps> = ({
       </div>
 
       {/* Top Customers */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-medium text-gray-900">{t('dashboard.topCustomers')}</h2>
         </div>
         <div className="p-6">
           <div className="space-y-4">
-            {topCustomers.map(([customer, stats]) => (
-              <div key={customer} className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">{customer}</h3>
-                  <p className="text-sm text-gray-500">{stats.count} {t('common.invoices')}</p>
+            {topCustomers.map(([customer, stats], index) => (
+              <div key={customer} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-medium">
+                    {index + 1}
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-gray-900">{customer}</h3>
+                    <p className="text-sm text-gray-500">{stats.count} {t('common.invoices')}</p>
+                  </div>
                 </div>
                 <p className="text-sm font-medium text-gray-900">
                   {formatCurrency(stats.amount)}
@@ -213,19 +250,22 @@ const Dashboard: React.FC<DashboardProps> = ({
       </div>
 
       {/* Recent Invoices */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
           <h2 className="text-lg font-medium text-gray-900">{t('dashboard.recentInvoices')}</h2>
           <Link 
             to="/invoices" 
-            className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+            className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-1"
           >
-            {t('dashboard.viewAll')} →
+            {t('dashboard.viewAll')}
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </Link>
         </div>
         <div className="divide-y divide-gray-200">
           {invoices.slice(0, 5).map((invoice) => (
-            <div key={invoice.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
+            <div key={invoice.id} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-900">{t('common.invoiceNumber')} #{invoice.invoiceNumber}</p>

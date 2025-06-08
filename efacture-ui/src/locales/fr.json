@@ -46,7 +46,12 @@
     "info": "Information",
     "saving": "Enregistrement...",
     "saveChanges": "Enregistrer les modifications",
-    "createInvoice": "Créer une facture"
+    "createInvoice": "Créer une facture",
+    "welcomeMessage": "Bienvenue sur EFacture - Votre système de gestion de factures",
+    "emailPlaceholder": "Entrez votre email",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "signingIn": "Connexion en cours...",
+    "refresh": "Actualiser"
   },
   "errors": {
     "invalidCredentials": "Identifiants invalides",
@@ -67,7 +72,9 @@
     "invalidDate": "Date invalide",
     "networkError": "Erreur réseau. Veuillez vérifier votre connexion.",
     "serverError": "Erreur serveur. Veuillez réessayer plus tard.",
-    "unauthorized": "Accès non autorisé. Veuillez vous reconnecter."
+    "unauthorized": "Accès non autorisé. Veuillez vous reconnecter.",
+    "bulkActionFailed": "Échec de {{action}} des factures : {{error}}",
+    "unknown": "Erreur inconnue"
   },
   "success": {
     "invoiceCreated": "Facture créée avec succès",
@@ -81,6 +88,7 @@
     "bulkInvoicesDeleted": "{{count}} factures supprimées avec succès"
   },
   "dashboard": {
+    "title": "Tableau de bord",
     "welcome": "Bienvenue sur EFacture",
     "summary": "Résumé",
     "totalInvoices": "Total des factures",
@@ -134,9 +142,7 @@
       "description": "Description",
       "quantity": "Quantité",
       "unitPrice": "Prix unitaire",
-      "subtotal": "Sous-total",
       "vat": "TVA ({{rate}}%)",
-      "total": "Total",
       "errors": {
         "invoiceNumberRequired": "Le numéro de facture est requis",
         "dateRequired": "La date est requise",
@@ -170,7 +176,9 @@
       "selected": "{{count}} facture sélectionnée",
       "selected_plural": "{{count}} factures sélectionnées",
       "submit": "Soumettre la sélection",
-      "delete": "Supprimer la sélection"
+      "delete": "Supprimer la sélection",
+      "submitting": "Soumission de {{count}} factures...",
+      "deleting": "Suppression de {{count}} factures..."
     },
     "list": {
       "noInvoices": "Aucune facture trouvée",
@@ -199,7 +207,7 @@
     },
     "confirm": {
       "title": "Confirmer {{action}}",
-      "message": "Êtes-vous sûr de vouloir {{action}} {{count}} facture sélectionnée{{plural}} ?{{warning}}",
+      "message": "Êtes-vous sûr de vouloir {{action}} {{count}} facture{{plural}} ?{{warning}}",
       "warning": " Cette action ne peut pas être annulée."
     }
   },
