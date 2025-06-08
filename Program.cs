@@ -23,9 +23,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 
-
-static string? GetUid(ClaimsPrincipal user) => user.FindFirstValue(ClaimTypes.NameIdentifier);
-
 var builder = WebApplication.CreateBuilder(args);
 
 Settings.License = LicenseType.Community;
@@ -148,6 +145,8 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
+
+#region Endpoints
 
 app.MapGet("/", () => "E-Facture API running ✅");
 
@@ -369,40 +368,43 @@ app.MapPost("/api/auth/register", async (UserManager<ApplicationUser> userManage
 });
 
 app.MapPost("/api/auth/login", async (UserManager<ApplicationUser> userManager, IConfiguration config, LoginModel model) =>
-{
-    var user = await userManager.FindByEmailAsync(model.Email);
-    if (user == null || !await userManager.CheckPasswordAsync(user, model.Password))
-        return Results.Unauthorized();
-
-    var jwtKey = config["Jwt:Key"]!;
-    var jwtIssuer = config["Jwt:Issuer"]!;
-    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
-    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-
-    var claims = new[]
     {
-        new Claim(ClaimTypes.NameIdentifier, user.Id),
-        new Claim(ClaimTypes.Email, user.Email!)
-    };
+        var user = await userManager.FindByEmailAsync(model.Email);
+        if (user == null || !await userManager.CheckPasswordAsync(user, model.Password))
+            return Results.Unauthorized();
+
+        var jwtKey = config["Jwt:Key"]!;
+        var jwtIssuer = config["Jwt:Issuer"]!;
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
 
-    var token = new JwtSecurityToken(
-        issuer: jwtIssuer,
-        audience: jwtIssuer,
-        claims: claims,
-        expires: DateTime.UtcNow.AddHours(2),
-        signingCredentials: credentials
-    );
-
-    return Results.Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
-})
-.Accepts<LoginModel>("application/json")
-.Produces(StatusCodes.Status200OK)
-.Produces(StatusCodes.Status401Unauthorized);
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Email, user.Email!)
+        };
 
 
+        var token = new JwtSecurityToken(
+            issuer: jwtIssuer,
+            audience: jwtIssuer,
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(2),
+            signingCredentials: credentials
+        );
+
+        return Results.Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+    })
+    .Accepts<LoginModel>("application/json")
+    .Produces(StatusCodes.Status200OK)
+    .Produces(StatusCodes.Status401Unauthorized);
+
+#endregion
 
 app.MapControllers();
 
 app.Run();
+return;
+
+static string? GetUid(ClaimsPrincipal user) => user.FindFirstValue(ClaimTypes.NameIdentifier);
