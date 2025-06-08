@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Invoice } from '../types';
 
 interface DashboardProps {
@@ -15,6 +16,28 @@ const Dashboard: React.FC<DashboardProps> = ({
   error,
   onDownloadPdf 
 }) => {
+  const { t, i18n } = useTranslation();
+
+  // Format currency based on current language
+  const formatCurrency = (amount: number) => {
+    if (i18n.language === 'fr') {
+      // French format: 1 234,56 MAD
+      return new Intl.NumberFormat('fr-FR', { 
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(amount) + ' MAD';
+    } else {
+      // English format: MAD 1,234.56
+      return new Intl.NumberFormat('en-US', { 
+        style: 'currency', 
+        currency: 'MAD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(amount);
+    }
+  };
+
   // Calculate statistics
   const totalAmount = invoices.reduce((sum, invoice) => sum + invoice.total, 0);
   const averageAmount = invoices.length > 0 ? totalAmount / invoices.length : 0;
@@ -25,7 +48,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   // Get monthly statistics
   const monthlyStats = invoices.reduce((acc, invoice) => {
-    const month = new Date(invoice.date).toLocaleString('default', { month: 'long' });
+    const month = new Date(invoice.date).toLocaleString(i18n.language === 'fr' ? 'fr-FR' : 'en-US', { month: 'long' });
     if (!acc[month]) {
       acc[month] = { count: 0, amount: 0 };
     }
@@ -71,8 +94,8 @@ const Dashboard: React.FC<DashboardProps> = ({
           <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Invoices Found</h3>
-          <p className="text-gray-500">Get started by creating your first invoice.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">{t('dashboard.noInvoices')}</h3>
+          <p className="text-gray-500">{t('dashboard.getStarted')}</p>
         </div>
       </div>
     );
@@ -90,7 +113,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               </svg>
             </div>
             <div className="ml-4">
-              <h2 className="text-sm font-medium text-gray-600">Total Invoices</h2>
+              <h2 className="text-sm font-medium text-gray-600">{t('dashboard.totalInvoices')}</h2>
               <p className="text-2xl font-semibold text-gray-900">{invoices.length}</p>
             </div>
           </div>
@@ -104,10 +127,10 @@ const Dashboard: React.FC<DashboardProps> = ({
               </svg>
             </div>
             <div className="ml-4">
-              <h2 className="text-sm font-medium text-gray-600">Submitted</h2>
+              <h2 className="text-sm font-medium text-gray-600">{t('invoice.status.submitted')}</h2>
               <p className="text-2xl font-semibold text-gray-900">{submittedInvoices.length}</p>
               <p className="text-sm text-gray-500">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(submittedAmount)}
+                {formatCurrency(submittedAmount)}
               </p>
             </div>
           </div>
@@ -121,10 +144,10 @@ const Dashboard: React.FC<DashboardProps> = ({
               </svg>
             </div>
             <div className="ml-4">
-              <h2 className="text-sm font-medium text-gray-600">Ready</h2>
+              <h2 className="text-sm font-medium text-gray-600">{t('invoice.status.pending')}</h2>
               <p className="text-2xl font-semibold text-gray-900">{readyInvoices.length}</p>
               <p className="text-sm text-gray-500">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(readyAmount)}
+                {formatCurrency(readyAmount)}
               </p>
             </div>
           </div>
@@ -138,9 +161,9 @@ const Dashboard: React.FC<DashboardProps> = ({
               </svg>
             </div>
             <div className="ml-4">
-              <h2 className="text-sm font-medium text-gray-600">Average Amount</h2>
+              <h2 className="text-sm font-medium text-gray-600">{t('dashboard.averageAmount')}</h2>
               <p className="text-2xl font-semibold text-gray-900">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(averageAmount)}
+                {formatCurrency(averageAmount)}
               </p>
             </div>
           </div>
@@ -150,16 +173,16 @@ const Dashboard: React.FC<DashboardProps> = ({
       {/* Monthly Statistics */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">Monthly Statistics</h2>
+          <h2 className="text-lg font-medium text-gray-900">{t('dashboard.monthlyStats')}</h2>
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {Object.entries(monthlyStats).map(([month, stats]) => (
               <div key={month} className="bg-gray-50 rounded-lg p-4">
                 <h3 className="text-sm font-medium text-gray-600">{month}</h3>
-                <p className="text-lg font-semibold text-gray-900">{stats.count} invoices</p>
+                <p className="text-lg font-semibold text-gray-900">{stats.count} {t('common.invoices')}</p>
                 <p className="text-sm text-gray-500">
-                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(stats.amount)}
+                  {formatCurrency(stats.amount)}
                 </p>
               </div>
             ))}
@@ -170,7 +193,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       {/* Top Customers */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">Top Customers</h2>
+          <h2 className="text-lg font-medium text-gray-900">{t('dashboard.topCustomers')}</h2>
         </div>
         <div className="p-6">
           <div className="space-y-4">
@@ -178,10 +201,10 @@ const Dashboard: React.FC<DashboardProps> = ({
               <div key={customer} className="flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-medium text-gray-900">{customer}</h3>
-                  <p className="text-sm text-gray-500">{stats.count} invoices</p>
+                  <p className="text-sm text-gray-500">{stats.count} {t('common.invoices')}</p>
                 </div>
                 <p className="text-sm font-medium text-gray-900">
-                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(stats.amount)}
+                  {formatCurrency(stats.amount)}
                 </p>
               </div>
             ))}
@@ -192,12 +215,12 @@ const Dashboard: React.FC<DashboardProps> = ({
       {/* Recent Invoices */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-lg font-medium text-gray-900">Recent Invoices</h2>
+          <h2 className="text-lg font-medium text-gray-900">{t('dashboard.recentInvoices')}</h2>
           <Link 
             to="/invoices" 
             className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
           >
-            View all invoices →
+            {t('dashboard.viewAll')} →
           </Link>
         </div>
         <div className="divide-y divide-gray-200">
@@ -205,12 +228,14 @@ const Dashboard: React.FC<DashboardProps> = ({
             <div key={invoice.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Invoice #{invoice.invoiceNumber}</p>
-                  <p className="text-sm text-gray-500">{new Date(invoice.date).toLocaleDateString()}</p>
+                  <p className="text-sm font-medium text-gray-900">{t('common.invoiceNumber')} #{invoice.invoiceNumber}</p>
+                  <p className="text-sm text-gray-500">
+                    {new Date(invoice.date).toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium text-gray-900">
-                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MAD' }).format(invoice.total)}
+                    {formatCurrency(invoice.total)}
                   </p>
                   <p className="text-sm text-gray-500">{invoice.customerName}</p>
                 </div>

@@ -8,8 +8,12 @@ import ImportCSV from "./components/ImportCSV";
 import InvoiceForm from "./components/InvoiceForm";
 import { API_ENDPOINTS } from "./config/api";
 import { Toaster, toast } from 'react-hot-toast';
+import ErrorBoundary from './components/ErrorBoundary';
+import ErrorPage from './components/ErrorPage';
+import { useTranslation } from 'react-i18next';
 
 function App() {
+  const { t, i18n } = useTranslation();
   // ─── AUTH STATE ───────────────────────────────────────────────────────────
   const [token, setToken] = useState<string | null>(() => {
     const storedToken = localStorage.getItem("token");
@@ -85,14 +89,14 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Invalid credentials");
+        throw new Error(t('errors.invalidCredentials'));
       }
 
       const data = await response.json();
       localStorage.setItem("token", data.token);
       setToken(data.token);
     } catch (err) {
-      setLoginError(err instanceof Error ? err.message : "An error occurred");
+      setLoginError(err instanceof Error ? err.message : t('errors.anErrorOccurred'));
     }
   };
 
@@ -124,7 +128,7 @@ function App() {
       }
       
       await fetchInvoices();
-      toast.success("Invoice created successfully");
+      toast.success(t('success.invoiceCreated'));
     } catch (err: any) {
       throw err;
     }
@@ -132,7 +136,7 @@ function App() {
 
   const handleUpdateInvoice = async (invoice: NewInvoice) => {
     if (!invoice.id) {
-      toast.error("Cannot update invoice: Missing invoice ID");
+      toast.error(t('errors.failedToUpdateInvoice'));
       return;
     }
 
@@ -158,7 +162,7 @@ function App() {
       }
       
       await fetchInvoices();
-      toast.success("Invoice updated successfully");
+      toast.success(t('success.invoiceUpdated'));
     } catch (err: any) {
       throw err;
     }
@@ -230,7 +234,7 @@ function App() {
   const handleImportCSV = async (file: File) => {
     setImportLoading(true);
     setError("");
-    const toastId = toast.loading('Importing CSV file...');
+    const toastId = toast.loading(t('common.importingCSV'));
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -247,17 +251,23 @@ function App() {
         return;
       }
 
-      if (!response.ok) throw new Error("Failed to import CSV");
+      if (!response.ok) throw new Error(t('errors.failedToImportCSV'));
       
       await fetchInvoices();
-      toast.success('CSV file imported successfully!', { id: toastId });
+      toast.success(t('success.csvImported'), { id: toastId });
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "An error occurred";
+      const errorMessage = err instanceof Error ? err.message : t('errors.anErrorOccurred');
       setError(errorMessage);
-      toast.error(`Failed to import CSV: ${errorMessage}`, { id: toastId });
+      toast.error(`${t('errors.failedToImportCSV')}: ${errorMessage}`, { id: toastId });
     } finally {
       setImportLoading(false);
     }
+  };
+
+  // Add language switcher function
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'fr' : 'en';
+    i18n.changeLanguage(newLang);
   };
 
   // ─── AUTH HANDLING ─────────────────────────────────────────────────────────
@@ -265,8 +275,14 @@ function App() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-sm">
-          <div>
-            <h2 className="text-center text-3xl font-bold text-gray-900">Sign in to your account</h2>
+          <div className="flex justify-between items-center">
+            <h2 className="text-center text-3xl font-bold text-gray-900">{t('common.signIn')}</h2>
+            <button
+              onClick={toggleLanguage}
+              className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+            >
+              {i18n.language === 'en' ? 'FR' : 'EN'}
+            </button>
           </div>
           <form className="mt-8 space-y-6" onSubmit={handleLogin}>
             {loginError && (
@@ -277,7 +293,7 @@ function App() {
             <div className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email address
+                  {t('common.email')}
                 </label>
                 <input
                   id="email"
@@ -291,7 +307,7 @@ function App() {
               </div>
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Password
+                  {t('common.password')}
                 </label>
                 <input
                   id="password"
@@ -309,7 +325,7 @@ function App() {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Sign in
+                {t('common.signInButton')}
               </button>
             </div>
           </form>
@@ -320,117 +336,133 @@ function App() {
 
   // ─── RENDER ─────────────────────────────────────────────────────────────────
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-gray-50">
-        <Toaster position="top-right" />
-        <nav className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16">
-              <div className="flex">
-                <div className="flex-shrink-0 flex items-center">
-                  <img
-                    src="/favicon.png"
-                    alt="EFacture Logo"
-                    className="h-8 w-8 mr-2"
-                  />
-                  <h1 className="text-xl font-bold text-gray-900">EFacture</h1>
+    <ErrorBoundary
+      fallback={
+        <ErrorPage
+          title="Application Error"
+          message="Something went wrong in the application. Please try refreshing the page."
+          onRetry={() => window.location.reload()}
+        />
+      }
+    >
+      <BrowserRouter>
+        <div className="min-h-screen bg-gray-100">
+          <Toaster position="top-right" />
+          <nav className="bg-white shadow-sm">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between h-16">
+                <div className="flex">
+                  <div className="flex-shrink-0 flex items-center">
+                    <img
+                      src="/favicon.png"
+                      alt="EFacture Logo"
+                      className="h-8 w-8 mr-2"
+                    />
+                    <h1 className="text-xl font-bold text-gray-900">EFacture</h1>
+                  </div>
+                  <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                    <NavLink
+                      to="/"
+                      className={({ isActive }) =>
+                        `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                          isActive
+                            ? 'border-blue-500 text-gray-900'
+                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                        }`
+                      }
+                    >
+                      {t('common.dashboard')}
+                    </NavLink>
+                    <NavLink
+                      to="/invoices"
+                      className={({ isActive }) =>
+                        `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                          isActive
+                            ? 'border-blue-500 text-gray-900'
+                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                        }`
+                      }
+                    >
+                      {t('common.invoices')}
+                    </NavLink>
+                  </div>
                 </div>
-                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                  <NavLink
-                    to="/"
-                    className={({ isActive }) =>
-                      `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                        isActive
-                          ? 'border-blue-500 text-gray-900'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                      }`
-                    }
+                <div className="flex items-center space-x-4">
+                  <button
+                    onClick={toggleLanguage}
+                    className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                   >
-                    Dashboard
-                  </NavLink>
-                  <NavLink
-                    to="/invoices"
-                    className={({ isActive }) =>
-                      `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                        isActive
-                          ? 'border-blue-500 text-gray-900'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                      }`
-                    }
+                    {i18n.language === 'en' ? 'FR' : 'EN'}
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
-                    Invoices
-                  </NavLink>
+                    {t('common.logout')}
+                  </button>
                 </div>
-              </div>
-              <div className="flex items-center">
-                <button
-                  onClick={handleLogout}
-                  className="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Logout
-                </button>
               </div>
             </div>
-          </div>
-        </nav>
+          </nav>
 
-        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <Routes>
-            <Route path="/" element={<Dashboard invoices={invoices} loading={loading} error={error} onDownloadPdf={handleDownloadPdf} />} />
-            <Route 
-              path="/invoices" 
-              element={
-                <div>
-                  <div className="mb-6 flex items-center justify-between">
-                    <ImportCSV onImport={handleImportCSV} loading={importLoading} />
-                    <button
-                      onClick={() => setShowInvoiceForm(true)}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors ${
-                        importLoading ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
-                      }`}
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                      New Invoice
-                    </button>
+          <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <Routes>
+              <Route path="/" element={<Dashboard invoices={invoices} loading={loading} error={error} onDownloadPdf={handleDownloadPdf} />} />
+              <Route 
+                path="/invoices" 
+                element={
+                  <div>
+                    <div className="mb-6 flex items-center justify-between">
+                      <ImportCSV onImport={handleImportCSV} loading={importLoading} />
+                      <button
+                        onClick={() => setShowInvoiceForm(true)}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors ${
+                          importLoading ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
+                        }`}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        {t('common.newInvoice')}
+                      </button>
+                    </div>
+
+                    <div className="bg-white rounded-lg border border-gray-200">
+                      <InvoiceList 
+                        invoices={invoices} 
+                        loading={loading} 
+                        error={error} 
+                        onDelete={handleDeleteInvoice}
+                        onDownloadPdf={handleDownloadPdf}
+                        onSubmit={handleSubmitInvoice}
+                        onCreateInvoice={handleCreateInvoice}
+                        onUpdateInvoice={handleUpdateInvoice}
+                        disabled={importLoading}
+                        importLoading={importLoading}
+                        onImportCSV={handleImportCSV}
+                      />
+                    </div>
+
+                    {showInvoiceForm && (
+                      <InvoiceForm
+                        onSubmit={handleCreateInvoice}
+                        onClose={() => setShowInvoiceForm(false)}
+                        disabled={importLoading}
+                      />
+                    )}
                   </div>
-
-                  <div className="bg-white rounded-lg border border-gray-200">
-                    <InvoiceList 
-                      invoices={invoices} 
-                      loading={loading} 
-                      error={error} 
-                      onDelete={handleDeleteInvoice}
-                      onDownloadPdf={handleDownloadPdf}
-                      onSubmit={handleSubmitInvoice}
-                      onCreateInvoice={handleCreateInvoice}
-                      onUpdateInvoice={handleUpdateInvoice}
-                      disabled={importLoading}
-                      importLoading={importLoading}
-                      onImportCSV={handleImportCSV}
-                    />
-                  </div>
-
-                  {showInvoiceForm && (
-                    <InvoiceForm
-                      onSubmit={handleCreateInvoice}
-                      onClose={() => setShowInvoiceForm(false)}
-                      disabled={importLoading}
-                    />
-                  )}
-                </div>
-              } 
-            />
-            <Route 
-              path="/invoices/create" 
-              element={<CreateInvoice onSubmit={handleCreateInvoice} disabled={importLoading} />} 
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+                } 
+              />
+              <Route 
+                path="/invoices/create" 
+                element={<CreateInvoice onSubmit={handleCreateInvoice} disabled={importLoading} />} 
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+        </div>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
