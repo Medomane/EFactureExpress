@@ -199,6 +199,7 @@ function App() {
 
       if (!response.ok) throw new Error("Failed to download PDF");
       const data = await response.json();
+      console.log(data);
       window.open(data.url, '_blank');
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
