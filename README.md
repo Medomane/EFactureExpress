@@ -45,6 +45,25 @@ You're ready to start invoicing!
 
 ---
 
+## Environment Variables
+
+The API pulls sensitive settings from environment variables. Create a `.env` file
+or set them in your hosting environment. An example configuration is provided in
+[`.env.example`](./.env.example).
+
+| Variable | Description |
+| --- | --- |
+| `DEFAULT_CONNECTION` | Database connection string |
+| `MINIO_ENDPOINT` | MinIO server address |
+| `MINIO_ACCESS_KEY` | MinIO access key |
+| `MINIO_SECRET_KEY` | MinIO secret key |
+| `MINIO_BUCKET_NAME` | Bucket for storing invoice PDFs |
+| `JWT_KEY` | Secret used to sign JWT tokens |
+| `JWT_ISSUER` | JWT issuer value |
+| `JWT_AUDIENCE` | Audience for generated JWT tokens |
+
+---
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
