@@ -1,0 +1,1086 @@
+2025-06-08 06:29:56.725 +01:00 [DBG] An 'IServiceProvider' was created for internal use by Entity Framework.
+2025-06-08 06:29:57.952 +01:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserRole<string>' as the properties are already covered by the index {'UserId', 'RoleId'}.
+2025-06-08 06:29:57.958 +01:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserToken<string>' as the properties are already covered by the index {'UserId', 'LoginProvider', 'Name'}.
+2025-06-08 06:29:58.180 +01:00 [DBG] Entity Framework Core 9.0.5 initialized 'EFactureDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite:9.0.5' with options: None
+2025-06-08 06:29:58.499 +01:00 [DBG] Creating DbConnection.
+2025-06-08 06:29:58.514 +01:00 [DBG] Created DbConnection. (12ms).
+2025-06-08 06:29:58.521 +01:00 [DBG] Migrating using database 'main' on server 'efacture.db'.
+2025-06-08 06:29:58.529 +01:00 [DBG] Creating DbConnection.
+2025-06-08 06:29:58.533 +01:00 [DBG] Created DbConnection. (3ms).
+2025-06-08 06:29:58.535 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:29:58.555 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:29:58.567 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:29:58.575 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (4ms).
+2025-06-08 06:29:58.579 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:29:58.585 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:29:58.589 +01:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-06-08 06:29:58.599 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 06:29:58.608 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (8ms).
+2025-06-08 06:29:58.611 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (15ms).
+2025-06-08 06:29:58.621 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2025-06-08 06:29:58.644 +01:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2025-06-08 06:29:58.651 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 06:29:58.653 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (1ms).
+2025-06-08 06:29:58.654 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (2ms).
+2025-06-08 06:29:58.656 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2025-06-08 05:29:58.6515003+00:00');
+SELECT changes();
+2025-06-08 06:29:58.662 +01:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2025-06-08 05:29:58.6515003+00:00');
+SELECT changes();
+2025-06-08 06:29:58.717 +01:00 [DBG] Beginning transaction with isolation level 'Unspecified'.
+2025-06-08 06:29:58.722 +01:00 [DBG] Began transaction with isolation level 'Serializable'.
+2025-06-08 06:29:58.724 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 06:29:58.726 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 06:29:58.728 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (3ms).
+2025-06-08 06:29:58.730 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2025-06-08 06:29:58.733 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2025-06-08 06:29:58.737 +01:00 [DBG] Committing transaction.
+2025-06-08 06:29:58.739 +01:00 [DBG] Committed transaction.
+2025-06-08 06:29:58.741 +01:00 [DBG] Disposing transaction.
+2025-06-08 06:29:58.744 +01:00 [DBG] Beginning transaction with isolation level 'Unspecified'.
+2025-06-08 06:29:58.745 +01:00 [DBG] Began transaction with isolation level 'Serializable'.
+2025-06-08 06:29:58.747 +01:00 [DBG] Creating DbConnection.
+2025-06-08 06:29:58.748 +01:00 [DBG] Created DbConnection. (0ms).
+2025-06-08 06:29:58.749 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:29:58.751 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:29:58.753 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:29:58.755 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (1ms).
+2025-06-08 06:29:58.757 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 06:29:58.758 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (1ms).
+2025-06-08 06:29:58.760 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (3ms).
+2025-06-08 06:29:58.762 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2025-06-08 06:29:58.765 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2025-06-08 06:29:58.770 +01:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2025-06-08 06:29:58.771 +01:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2025-06-08 06:29:58.773 +01:00 [DBG] Initialized DbCommand for 'ExecuteReader' (3ms).
+2025-06-08 06:29:58.775 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-06-08 06:29:58.779 +01:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-06-08 06:29:58.785 +01:00 [DBG] Closing data reader to 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:29:58.787 +01:00 [DBG] A data reader for 'main' on server 'S:\EFacture.API\efacture.db' is being disposed after spending 4ms reading results.
+2025-06-08 06:29:58.794 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-06-08 06:29:58.795 +01:00 [DBG] Committing transaction.
+2025-06-08 06:29:58.796 +01:00 [DBG] Committed transaction.
+2025-06-08 06:29:58.797 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 06:29:58.799 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (1ms).
+2025-06-08 06:29:58.801 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (3ms).
+2025-06-08 06:29:58.802 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2025-06-08 06:29:58.805 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2025-06-08 06:29:58.808 +01:00 [DBG] Disposing transaction.
+2025-06-08 06:29:58.809 +01:00 [DBG] Closing connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:29:58.813 +01:00 [DBG] Closed connection to database 'main' on server 'efacture.db' (4ms).
+2025-06-08 06:29:58.817 +01:00 [DBG] 'EFactureDbContext' disposed.
+2025-06-08 06:29:58.819 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:29:58.821 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (2ms).
+2025-06-08 06:29:58.912 +01:00 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.TryParseModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+2025-06-08 06:29:58.935 +01:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-06-08 06:29:58.942 +01:00 [DBG] Hosting starting
+2025-06-08 06:29:59.003 +01:00 [INF] User profile is available. Using 'C:\Users\medha\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-06-08 06:29:59.018 +01:00 [DBG] Reading data from file 'C:\Users\medha\AppData\Local\ASP.NET\DataProtection-Keys\key-4f6e6e7a-f33c-4507-9c41-cda3d8c10a42.xml'.
+2025-06-08 06:29:59.090 +01:00 [DBG] Found key {4f6e6e7a-f33c-4507-9c41-cda3d8c10a42}.
+2025-06-08 06:29:59.104 +01:00 [DBG] Considering key {4f6e6e7a-f33c-4507-9c41-cda3d8c10a42} with expiration date 2025-08-30 15:27:48Z as default key.
+2025-06-08 06:29:59.110 +01:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2025-06-08 06:29:59.113 +01:00 [DBG] Decrypting secret element using Windows DPAPI.
+2025-06-08 06:29:59.115 +01:00 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2025-06-08 06:29:59.118 +01:00 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2025-06-08 06:29:59.121 +01:00 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2025-06-08 06:29:59.125 +01:00 [DBG] Using key {4f6e6e7a-f33c-4507-9c41-cda3d8c10a42} as the default key.
+2025-06-08 06:29:59.127 +01:00 [DBG] Key ring with default key {4f6e6e7a-f33c-4507-9c41-cda3d8c10a42} was loaded during application startup.
+2025-06-08 06:29:59.426 +01:00 [INF] Now listening on: http://localhost:5246
+2025-06-08 06:29:59.427 +01:00 [DBG] Loaded hosting startup assembly EFacture.API
+2025-06-08 06:29:59.428 +01:00 [DBG] Loaded hosting startup assembly Microsoft.AspNetCore.Watch.BrowserRefresh
+2025-06-08 06:29:59.430 +01:00 [DBG] Loaded hosting startup assembly Microsoft.WebTools.BrowserLink.Net
+2025-06-08 06:29:59.433 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-06-08 06:29:59.434 +01:00 [INF] Hosting environment: Development
+2025-06-08 06:29:59.435 +01:00 [INF] Content root path: S:\EFacture.API
+2025-06-08 06:29:59.437 +01:00 [DBG] Hosting started
+2025-06-08 06:29:59.817 +01:00 [DBG] Connection id "0HND69M1H3REC" accepted.
+2025-06-08 06:29:59.819 +01:00 [DBG] Connection id "0HND69M1H3REC" received FIN.
+2025-06-08 06:29:59.820 +01:00 [DBG] Connection id "0HND69M1H3REC" started.
+2025-06-08 06:29:59.836 +01:00 [DBG] Connection id "0HND69M1H3REC" sending FIN because: "The Socket transport's send loop completed gracefully."
+2025-06-08 06:29:59.843 +01:00 [DBG] Connection id "0HND69M1H3REC" disconnecting.
+2025-06-08 06:29:59.855 +01:00 [DBG] Connection id "0HND69M1H3REC" stopped.
+2025-06-08 06:30:00.742 +01:00 [DBG] Connection id "0HND69M1H3RED" accepted.
+2025-06-08 06:30:00.745 +01:00 [DBG] Connection id "0HND69M1H3RED" started.
+2025-06-08 06:30:00.841 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5246/ - null null
+2025-06-08 06:30:01.448 +01:00 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2025-06-08 06:30:01.519 +01:00 [DBG] 1 candidate(s) found for the request path '/'
+2025-06-08 06:30:01.523 +01:00 [DBG] Request matched endpoint 'HTTP: GET /'
+2025-06-08 06:30:03.186 +01:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2025-06-08 06:30:03.191 +01:00 [INF] Executing endpoint 'HTTP: GET /'
+2025-06-08 06:30:03.212 +01:00 [INF] Executed endpoint 'HTTP: GET /'
+2025-06-08 06:30:03.216 +01:00 [INF] HTTP GET / responded 200 in 1685.0057 ms
+2025-06-08 06:30:03.225 +01:00 [DBG] Connection id "0HND69M1H3RED" completed keep alive response.
+2025-06-08 06:30:03.230 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5246/ - 200 null text/plain; charset=utf-8 2400.7116ms
+2025-06-08 06:30:03.295 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5246/favicon.ico - null null
+2025-06-08 06:30:03.299 +01:00 [DBG] No candidates found for the request path '/favicon.ico'
+2025-06-08 06:30:03.301 +01:00 [DBG] Request did not match any endpoints
+2025-06-08 06:30:03.304 +01:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2025-06-08 06:30:03.305 +01:00 [INF] HTTP GET /favicon.ico responded 404 in 2.8264 ms
+2025-06-08 06:30:03.308 +01:00 [DBG] Connection id "0HND69M1H3RED" completed keep alive response.
+2025-06-08 06:30:03.309 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5246/favicon.ico - 404 0 null 13.7033ms
+2025-06-08 06:30:03.315 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5246/favicon.ico, Response status code: 404
+2025-06-08 06:30:04.157 +01:00 [DBG] Connection id "0HND69M1H3RED" received FIN.
+2025-06-08 06:30:04.160 +01:00 [DBG] Connection id "0HND69M1H3RED" sending FIN because: "The Socket transport's send loop completed gracefully."
+2025-06-08 06:30:04.162 +01:00 [DBG] Connection id "0HND69M1H3RED" disconnecting.
+2025-06-08 06:30:04.168 +01:00 [DBG] Connection id "0HND69M1H3RED" stopped.
+2025-06-08 06:40:50.170 +01:00 [DBG] Connection id "0HND69M1H3REE" accepted.
+2025-06-08 06:40:50.179 +01:00 [DBG] Connection id "0HND69M1H3REE" started.
+2025-06-08 06:40:50.181 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5246/api/auth/login - null null
+2025-06-08 06:40:50.186 +01:00 [DBG] 1 candidate(s) found for the request path '/api/auth/login'
+2025-06-08 06:40:50.193 +01:00 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2025-06-08 06:40:50.196 +01:00 [DBG] The request has an origin header: 'http://localhost:3000'.
+2025-06-08 06:40:50.197 +01:00 [INF] CORS policy execution successful.
+2025-06-08 06:40:50.199 +01:00 [DBG] The request is a preflight request.
+2025-06-08 06:40:50.201 +01:00 [INF] HTTP OPTIONS /api/auth/login responded 204 in 6.6052 ms
+2025-06-08 06:40:50.203 +01:00 [DBG] Connection id "0HND69M1H3REE" completed keep alive response.
+2025-06-08 06:40:50.205 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5246/api/auth/login - 204 null null 24.1548ms
+2025-06-08 06:40:50.209 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5246/api/auth/login - application/json 50
+2025-06-08 06:40:50.212 +01:00 [DBG] 1 candidate(s) found for the request path '/api/auth/login'
+2025-06-08 06:40:50.214 +01:00 [DBG] Request matched endpoint 'HTTP: POST /api/auth/login'
+2025-06-08 06:40:50.215 +01:00 [DBG] The request has an origin header: 'http://localhost:3000'.
+2025-06-08 06:40:50.217 +01:00 [INF] CORS policy execution successful.
+2025-06-08 06:40:50.220 +01:00 [DBG] AuthenticationScheme: Bearer was not authenticated.
+2025-06-08 06:40:50.221 +01:00 [INF] Executing endpoint 'HTTP: POST /api/auth/login'
+2025-06-08 06:40:50.230 +01:00 [DBG] Connection id "0HND69M1H3REE", Request id "0HND69M1H3REE:00000002": started reading request body.
+2025-06-08 06:40:50.232 +01:00 [DBG] Connection id "0HND69M1H3REE", Request id "0HND69M1H3REE:00000002": done reading request body.
+2025-06-08 06:40:50.302 +01:00 [DBG] Entity Framework Core 9.0.5 initialized 'EFactureDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite:9.0.5' with options: None
+2025-06-08 06:40:50.365 +01:00 [DBG] Compiling query expression: 
+'DbSet<ApplicationUser>()
+    .SingleOrDefault(u => u.NormalizedEmail == __normalizedEmail_0)'
+2025-06-08 06:40:50.582 +01:00 [DBG] Generated query execution expression: 
+'queryContext => ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync<ApplicationUser>(
+    asyncEnumerable: SingleQueryingEnumerable.Create<ApplicationUser>(
+        relationalQueryContext: (RelationalQueryContext)queryContext, 
+        relationalCommandResolver: parameters => [LIFTABLE Constant: RelationalCommandCache.QueryExpression(
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationUser.Id (string) Required PK AfterSave:Throw, 0], [Property: ApplicationUser.AccessFailedCount (int) Required, 1], [Property: ApplicationUser.ConcurrencyStamp (string) Concurrency, 2], [Property: ApplicationUser.Email (string) MaxLength(256), 3], [Property: ApplicationUser.EmailConfirmed (bool) Required, 4], [Property: ApplicationUser.LockoutEnabled (bool) Required, 5], [Property: ApplicationUser.LockoutEnd (DateTimeOffset?), 6], [Property: ApplicationUser.NormalizedEmail (string) Index MaxLength(256), 7], [Property: ApplicationUser.NormalizedUserName (string) Index MaxLength(256), 8], [Property: ApplicationUser.PasswordHash (string), 9], [Property: ApplicationUser.PhoneNumber (string), 10], [Property: ApplicationUser.PhoneNumberConfirmed (bool) Required, 11], [Property: ApplicationUser.SecurityStamp (string), 12], [Property: ApplicationUser.TwoFactorEnabled (bool) Required, 13], [Property: ApplicationUser.UserName (string) MaxLength(256), 14] }
+            SELECT TOP(2) a.Id, a.AccessFailedCount, a.ConcurrencyStamp, a.Email, a.EmailConfirmed, a.LockoutEnabled, a.LockoutEnd, a.NormalizedEmail, a.NormalizedUserName, a.PasswordHash, a.PhoneNumber, a.PhoneNumberConfirmed, a.SecurityStamp, a.TwoFactorEnabled, a.UserName
+            FROM AspNetUsers AS a
+            WHERE a.NormalizedEmail == @__normalizedEmail_0) | Resolver: c => new RelationalCommandCache(
+            c.Dependencies.MemoryCache, 
+            c.RelationalDependencies.QuerySqlGeneratorFactory, 
+            c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, 
+            Projection Mapping:
+                EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: ApplicationUser.Id (string) Required PK AfterSave:Throw, 0], [Property: ApplicationUser.AccessFailedCount (int) Required, 1], [Property: ApplicationUser.ConcurrencyStamp (string) Concurrency, 2], [Property: ApplicationUser.Email (string) MaxLength(256), 3], [Property: ApplicationUser.EmailConfirmed (bool) Required, 4], [Property: ApplicationUser.LockoutEnabled (bool) Required, 5], [Property: ApplicationUser.LockoutEnd (DateTimeOffset?), 6], [Property: ApplicationUser.NormalizedEmail (string) Index MaxLength(256), 7], [Property: ApplicationUser.NormalizedUserName (string) Index MaxLength(256), 8], [Property: ApplicationUser.PasswordHash (string), 9], [Property: ApplicationUser.PhoneNumber (string), 10], [Property: ApplicationUser.PhoneNumberConfirmed (bool) Required, 11], [Property: ApplicationUser.SecurityStamp (string), 12], [Property: ApplicationUser.TwoFactorEnabled (bool) Required, 13], [Property: ApplicationUser.UserName (string) MaxLength(256), 14] }
+            SELECT TOP(2) a.Id, a.AccessFailedCount, a.ConcurrencyStamp, a.Email, a.EmailConfirmed, a.LockoutEnabled, a.LockoutEnd, a.NormalizedEmail, a.NormalizedUserName, a.PasswordHash, a.PhoneNumber, a.PhoneNumberConfirmed, a.SecurityStamp, a.TwoFactorEnabled, a.UserName
+            FROM AspNetUsers AS a
+            WHERE a.NormalizedEmail == @__normalizedEmail_0, 
+            False, 
+            new HashSet<string>(
+                new string[]{ }, 
+                StringComparer.Ordinal
+            )
+        )].GetRelationalCommandTemplate(parameters), 
+        readerColumns: null, 
+        shaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+        {
+            ApplicationUser entity;
+            entity = 
+            {
+                MaterializationContext materializationContext1;
+                IEntityType entityType1;
+                ApplicationUser instance1;
+                InternalEntityEntry entry1;
+                bool hasNullKey1;
+                materializationContext1 = new MaterializationContext(
+                    [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                    queryContext.Context
+                );
+                instance1 = default(ApplicationUser);
+                entry1 = queryContext.TryGetEntry(
+                    key: [LIFTABLE Constant: Key: ApplicationUser.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("EFacture.API.Models.ApplicationUser").FindPrimaryKey()], 
+                    keyValues: new object[]{ (object)dataReader.GetString(0) }, 
+                    throwOnNullKey: True, 
+                    hasNullKey: hasNullKey1);
+                !(hasNullKey1) ? entry1 != default(InternalEntityEntry) ? 
+                {
+                    entityType1 = entry1.EntityType;
+                    return instance1 = (ApplicationUser)entry1.Entity;
+                } : 
+                {
+                    ISnapshot shadowSnapshot1;
+                    shadowSnapshot1 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                    entityType1 = [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{0} => namelessParameter{0}.Dependencies.Model.FindEntityType("EFacture.API.Models.ApplicationUser")];
+                    instance1 = switch (entityType1)
+                    {
+                        case [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{1} => namelessParameter{1}.Dependencies.Model.FindEntityType("EFacture.API.Models.ApplicationUser")]: 
+                            {
+                                return 
+                                {
+                                    ApplicationUser instance;
+                                    instance = new ApplicationUser();
+                                    instance.<Id>k__BackingField = dataReader.GetString(0);
+                                    instance.<AccessFailedCount>k__BackingField = dataReader.GetInt32(1);
+                                    instance.<ConcurrencyStamp>k__BackingField = dataReader.IsDBNull(2) ? default(string) : dataReader.GetString(2);
+                                    instance.<Email>k__BackingField = dataReader.IsDBNull(3) ? default(string) : dataReader.GetString(3);
+                                    instance.<EmailConfirmed>k__BackingField = dataReader.GetBoolean(4);
+                                    instance.<LockoutEnabled>k__BackingField = dataReader.GetBoolean(5);
+                                    instance.<LockoutEnd>k__BackingField = dataReader.IsDBNull(6) ? default(DateTimeOffset?) : (DateTimeOffset?)dataReader.GetFieldValue<DateTimeOffset>(6);
+                                    instance.<NormalizedEmail>k__BackingField = dataReader.IsDBNull(7) ? default(string) : dataReader.GetString(7);
+                                    instance.<NormalizedUserName>k__BackingField = dataReader.IsDBNull(8) ? default(string) : dataReader.GetString(8);
+                                    instance.<PasswordHash>k__BackingField = dataReader.IsDBNull(9) ? default(string) : dataReader.GetString(9);
+                                    instance.<PhoneNumber>k__BackingField = dataReader.IsDBNull(10) ? default(string) : dataReader.GetString(10);
+                                    instance.<PhoneNumberConfirmed>k__BackingField = dataReader.GetBoolean(11);
+                                    instance.<SecurityStamp>k__BackingField = dataReader.IsDBNull(12) ? default(string) : dataReader.GetString(12);
+                                    instance.<TwoFactorEnabled>k__BackingField = dataReader.GetBoolean(13);
+                                    instance.<UserName>k__BackingField = dataReader.IsDBNull(14) ? default(string) : dataReader.GetString(14);
+                                    (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                        context: materializationContext1.Context, 
+                                        entity: instance, 
+                                        queryTrackingBehavior: TrackAll, 
+                                        structuralType: [LIFTABLE Constant: EntityType: ApplicationUser | Resolver: namelessParameter{2} => namelessParameter{2}.Dependencies.Model.FindEntityType("EFacture.API.Models.ApplicationUser")]) : default(void);
+                                    return instance;
+                                }}
+                        default: 
+                            default(ApplicationUser)
+                    }
+                    ;
+                    entry1 = entityType1 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                        entityType: entityType1, 
+                        entity: instance1, 
+                        snapshot: shadowSnapshot1);
+                    return instance1;
+                } : default(void);
+                return instance1;
+            };
+            return entity;
+        }, 
+        contextType: EFacture.API.Data.EFactureDbContext, 
+        standAloneStateManager: False, 
+        detailedErrorsEnabled: False, 
+        threadSafetyChecksEnabled: True), 
+    cancellationToken: queryContext.CancellationToken)'
+2025-06-08 06:40:50.632 +01:00 [DBG] Creating DbConnection.
+2025-06-08 06:40:50.634 +01:00 [DBG] Created DbConnection. (1ms).
+2025-06-08 06:40:50.636 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:40:50.639 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:40:50.641 +01:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2025-06-08 06:40:50.642 +01:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2025-06-08 06:40:50.645 +01:00 [DBG] Initialized DbCommand for 'ExecuteReader' (4ms).
+2025-06-08 06:40:50.649 +01:00 [DBG] Executing DbCommand [Parameters=[@__normalizedEmail_0='?' (Size = 16)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2025-06-08 06:40:50.658 +01:00 [INF] Executed DbCommand (11ms) [Parameters=[@__normalizedEmail_0='?' (Size = 16)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2025-06-08 06:40:50.694 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'ApplicationUser' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:50.729 +01:00 [DBG] Closing data reader to 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:40:50.731 +01:00 [DBG] A data reader for 'main' on server 'S:\EFacture.API\efacture.db' is being disposed after spending 69ms reading results.
+2025-06-08 06:40:50.735 +01:00 [DBG] Closing connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:40:50.738 +01:00 [DBG] Closed connection to database 'main' on server 'efacture.db' (2ms).
+2025-06-08 06:40:50.876 +01:00 [INF] Setting HTTP status code 200.
+2025-06-08 06:40:50.887 +01:00 [INF] Writing value of type '<>f__AnonymousType13`1' as Json.
+2025-06-08 06:40:50.899 +01:00 [INF] Executed endpoint 'HTTP: POST /api/auth/login'
+2025-06-08 06:40:50.900 +01:00 [INF] HTTP POST /api/auth/login responded 200 in 684.9096 ms
+2025-06-08 06:40:50.902 +01:00 [DBG] Connection id "0HND69M1H3REE" completed keep alive response.
+2025-06-08 06:40:50.905 +01:00 [DBG] 'EFactureDbContext' disposed.
+2025-06-08 06:40:50.908 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:40:50.910 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (1ms).
+2025-06-08 06:40:50.913 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5246/api/auth/login - 200 null application/json; charset=utf-8 703.7101ms
+2025-06-08 06:40:50.919 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5246/api/invoices - null null
+2025-06-08 06:40:50.923 +01:00 [DBG] 1 candidate(s) found for the request path '/api/invoices'
+2025-06-08 06:40:50.925 +01:00 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2025-06-08 06:40:50.926 +01:00 [DBG] The request has an origin header: 'http://localhost:3000'.
+2025-06-08 06:40:50.927 +01:00 [INF] CORS policy execution successful.
+2025-06-08 06:40:50.929 +01:00 [DBG] The request is a preflight request.
+2025-06-08 06:40:50.930 +01:00 [INF] HTTP OPTIONS /api/invoices responded 204 in 3.8712 ms
+2025-06-08 06:40:50.932 +01:00 [DBG] Connection id "0HND69M1H3REE" completed keep alive response.
+2025-06-08 06:40:50.933 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5246/api/invoices - 204 null null 13.8727ms
+2025-06-08 06:40:50.941 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5246/api/invoices - null null
+2025-06-08 06:40:50.944 +01:00 [DBG] 1 candidate(s) found for the request path '/api/invoices'
+2025-06-08 06:40:50.946 +01:00 [DBG] Request matched endpoint 'HTTP: GET /api/invoices'
+2025-06-08 06:40:50.949 +01:00 [DBG] The request has an origin header: 'http://localhost:3000'.
+2025-06-08 06:40:50.951 +01:00 [INF] CORS policy execution successful.
+2025-06-08 06:40:50.999 +01:00 [DBG] Successfully validated the token.
+2025-06-08 06:40:51.001 +01:00 [DBG] AuthenticationScheme: Bearer was successfully authenticated.
+2025-06-08 06:40:51.008 +01:00 [DBG] Authorization was successful.
+2025-06-08 06:40:51.009 +01:00 [INF] Executing endpoint 'HTTP: GET /api/invoices'
+2025-06-08 06:40:51.052 +01:00 [DBG] Entity Framework Core 9.0.5 initialized 'EFactureDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite:9.0.5' with options: None
+2025-06-08 06:40:51.062 +01:00 [DBG] Compiling query expression: 
+'DbSet<Invoice>()
+    .Include(i => i.Lines)'
+2025-06-08 06:40:51.074 +01:00 [DBG] Including navigation: 'Invoice.Lines'.
+2025-06-08 06:40:51.151 +01:00 [DBG] Generated query execution expression: 
+'queryContext => SingleQueryingEnumerable.Create<Invoice>(
+    relationalQueryContext: (RelationalQueryContext)queryContext, 
+    relationalCommandResolver: parameters => [LIFTABLE Constant: RelationalCommandCache.QueryExpression(
+        Client Projections:
+            0 -> Dictionary<IProperty, int> { [Property: Invoice.Id (int) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: Invoice.CustomerName (string) Required, 1], [Property: Invoice.Date (DateTime) Required, 2], [Property: Invoice.InvoiceNumber (string) Required, 3], [Property: Invoice.Status (InvoiceStatus) Required, 4], [Property: Invoice.SubTotal (decimal) Required, 5], [Property: Invoice.Total (decimal) Required, 6], [Property: Invoice.VAT (decimal) Required, 7] }
+            1 -> 0
+            2 -> Dictionary<IProperty, int> { [Property: InvoiceLine.Id (int) Required PK AfterSave:Throw ValueGenerated.OnAdd, 8], [Property: InvoiceLine.Description (string) Required, 9], [Property: InvoiceLine.InvoiceId (int) Required FK Index, 10], [Property: InvoiceLine.Quantity (decimal) Required, 11], [Property: InvoiceLine.UnitPrice (decimal) Required, 12] }
+            3 -> 8
+        SELECT i.Id, i.CustomerName, i.Date, i.InvoiceNumber, i.Status, i.SubTotal, i.Total, i.VAT, i0.Id, i0.Description, i0.InvoiceId, i0.Quantity, i0.UnitPrice
+        FROM Invoices AS i
+        LEFT JOIN InvoiceLines AS i0 ON i.Id == i0.InvoiceId
+        ORDER BY i.Id ASC) | Resolver: c => new RelationalCommandCache(
+        c.Dependencies.MemoryCache, 
+        c.RelationalDependencies.QuerySqlGeneratorFactory, 
+        c.RelationalDependencies.RelationalParameterBasedSqlProcessorFactory, 
+        Client Projections:
+            0 -> Dictionary<IProperty, int> { [Property: Invoice.Id (int) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: Invoice.CustomerName (string) Required, 1], [Property: Invoice.Date (DateTime) Required, 2], [Property: Invoice.InvoiceNumber (string) Required, 3], [Property: Invoice.Status (InvoiceStatus) Required, 4], [Property: Invoice.SubTotal (decimal) Required, 5], [Property: Invoice.Total (decimal) Required, 6], [Property: Invoice.VAT (decimal) Required, 7] }
+            1 -> 0
+            2 -> Dictionary<IProperty, int> { [Property: InvoiceLine.Id (int) Required PK AfterSave:Throw ValueGenerated.OnAdd, 8], [Property: InvoiceLine.Description (string) Required, 9], [Property: InvoiceLine.InvoiceId (int) Required FK Index, 10], [Property: InvoiceLine.Quantity (decimal) Required, 11], [Property: InvoiceLine.UnitPrice (decimal) Required, 12] }
+            3 -> 8
+        SELECT i.Id, i.CustomerName, i.Date, i.InvoiceNumber, i.Status, i.SubTotal, i.Total, i.VAT, i0.Id, i0.Description, i0.InvoiceId, i0.Quantity, i0.UnitPrice
+        FROM Invoices AS i
+        LEFT JOIN InvoiceLines AS i0 ON i.Id == i0.InvoiceId
+        ORDER BY i.Id ASC, 
+        False, 
+        new HashSet<string>(
+            new string[]{ }, 
+            StringComparer.Ordinal
+        )
+    )].GetRelationalCommandTemplate(parameters), 
+    readerColumns: null, 
+    shaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+    {
+        resultContext.Values == null ? 
+        {
+            Invoice entity;
+            entity = 
+            {
+                MaterializationContext materializationContext1;
+                IEntityType entityType1;
+                Invoice instance1;
+                InternalEntityEntry entry1;
+                bool hasNullKey1;
+                materializationContext1 = new MaterializationContext(
+                    [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                    queryContext.Context
+                );
+                instance1 = default(Invoice);
+                entry1 = queryContext.TryGetEntry(
+                    key: [LIFTABLE Constant: Key: Invoice.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("EFacture.API.Models.Invoice").FindPrimaryKey()], 
+                    keyValues: new object[]{ (object)dataReader.GetInt32(0) }, 
+                    throwOnNullKey: True, 
+                    hasNullKey: hasNullKey1);
+                !(hasNullKey1) ? entry1 != default(InternalEntityEntry) ? 
+                {
+                    entityType1 = entry1.EntityType;
+                    return instance1 = (Invoice)entry1.Entity;
+                } : 
+                {
+                    ISnapshot shadowSnapshot1;
+                    shadowSnapshot1 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                    entityType1 = [LIFTABLE Constant: EntityType: Invoice | Resolver: namelessParameter{0} => namelessParameter{0}.Dependencies.Model.FindEntityType("EFacture.API.Models.Invoice")];
+                    instance1 = switch (entityType1)
+                    {
+                        case [LIFTABLE Constant: EntityType: Invoice | Resolver: namelessParameter{1} => namelessParameter{1}.Dependencies.Model.FindEntityType("EFacture.API.Models.Invoice")]: 
+                            {
+                                return 
+                                {
+                                    Invoice instance;
+                                    instance = new Invoice();
+                                    instance.<Id>k__BackingField = dataReader.GetInt32(0);
+                                    instance.<CustomerName>k__BackingField = dataReader.GetString(1);
+                                    instance.<Date>k__BackingField = dataReader.GetDateTime(2);
+                                    instance.<InvoiceNumber>k__BackingField = dataReader.GetString(3);
+                                    instance.<Status>k__BackingField = Invoke(((EnumToNumberConverter<InvoiceStatus, int>)((IReadOnlyProperty)[LIFTABLE Constant: Property: Invoice.Status (InvoiceStatus) Required | Resolver: namelessParameter{2} => namelessParameter{2}.Dependencies.Model.FindEntityType("EFacture.API.Models.Invoice").FindProperty("Status")]).GetTypeMapping().Converter).ConvertFromProviderTyped, dataReader.GetInt32(4));
+                                    instance.<SubTotal>k__BackingField = dataReader.GetDecimal(5);
+                                    instance.<Total>k__BackingField = dataReader.GetDecimal(6);
+                                    instance.<VAT>k__BackingField = dataReader.GetDecimal(7);
+                                    (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                        context: materializationContext1.Context, 
+                                        entity: instance, 
+                                        queryTrackingBehavior: TrackAll, 
+                                        structuralType: [LIFTABLE Constant: EntityType: Invoice | Resolver: namelessParameter{3} => namelessParameter{3}.Dependencies.Model.FindEntityType("EFacture.API.Models.Invoice")]) : default(void);
+                                    return instance;
+                                }}
+                        default: 
+                            default(Invoice)
+                    }
+                    ;
+                    entry1 = entityType1 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                        entityType: entityType1, 
+                        entity: instance1, 
+                        snapshot: shadowSnapshot1);
+                    return instance1;
+                } : default(void);
+                return instance1;
+            };
+            resultContext.Values = new object[]{ entity };
+            ShaperProcessingExpressionVisitor.InitializeIncludeCollection<Invoice, Invoice>(
+                collectionId: 0, 
+                queryContext: queryContext, 
+                dbDataReader: dataReader, 
+                resultCoordinator: resultCoordinator, 
+                entity: (Invoice)(resultContext.Values[0]), 
+                parentIdentifier: [LIFTABLE Constant: Func<QueryContext, DbDataReader, object[]> | Resolver: _ => (queryContext, dataReader) => new object[]{ (object)(int?)dataReader.GetInt32(0) }], 
+                outerIdentifier: [LIFTABLE Constant: Func<QueryContext, DbDataReader, object[]> | Resolver: _ => (queryContext, dataReader) => new object[]{ (object)(int?)dataReader.GetInt32(0) }], 
+                navigation: [LIFTABLE Constant: Navigation: Invoice.Lines (List<InvoiceLine>) Collection ToDependent InvoiceLine Inverse: Invoice | Resolver: namelessParameter{4} => namelessParameter{4}.Dependencies.Model.FindEntityType("EFacture.API.Models.Invoice").FindNavigation("Lines")], 
+                clrCollectionAccessor: [LIFTABLE Constant: ClrICollectionAccessor<Invoice, List<InvoiceLine>, InvoiceLine> | Resolver: namelessParameter{5} => namelessParameter{5}.Dependencies.Model.FindEntityType("EFacture.API.Models.Invoice").FindNavigation("Lines").GetCollectionAccessor()], 
+                trackingQuery: True, 
+                setLoaded: True);
+        } : default(void);
+        ShaperProcessingExpressionVisitor.PopulateIncludeCollection<Invoice, InvoiceLine>(
+            collectionId: 0, 
+            queryContext: queryContext, 
+            dbDataReader: dataReader, 
+            resultCoordinator: resultCoordinator, 
+            parentIdentifier: [LIFTABLE Constant: Func<QueryContext, DbDataReader, object[]> | Resolver: _ => (queryContext, dataReader) => new object[]{ (object)(int?)dataReader.GetInt32(0) }], 
+            outerIdentifier: [LIFTABLE Constant: Func<QueryContext, DbDataReader, object[]> | Resolver: _ => (queryContext, dataReader) => new object[]{ (object)(int?)dataReader.GetInt32(0) }], 
+            selfIdentifier: [LIFTABLE Constant: Func<QueryContext, DbDataReader, object[]> | Resolver: _ => (queryContext, dataReader) => new object[]{ (object)dataReader.IsDBNull(8) ? default(int?) : (int?)dataReader.GetInt32(8) }], 
+            parentIdentifierValueComparers: [LIFTABLE Constant: Func<object, object, bool>[] { Func<object, object, bool> } | Resolver: _ => new Func<object, object, bool>[]{ (left, right) => left == null ? right == null : right != null && (int)left == (int)right }], 
+            outerIdentifierValueComparers: [LIFTABLE Constant: Func<object, object, bool>[] { Func<object, object, bool> } | Resolver: _ => new Func<object, object, bool>[]{ (left, right) => left == null ? right == null : right != null && (int)left == (int)right }], 
+            selfIdentifierValueComparers: [LIFTABLE Constant: Func<object, object, bool>[] { Func<object, object, bool> } | Resolver: _ => new Func<object, object, bool>[]{ (left, right) => left == null ? right == null : right != null && (int)left == (int)right }], 
+            innerShaper: (queryContext, dataReader, resultContext, resultCoordinator) => 
+            {
+                InvoiceLine entity;
+                entity = 
+                {
+                    MaterializationContext materializationContext2;
+                    IEntityType entityType2;
+                    InvoiceLine instance2;
+                    InternalEntityEntry entry2;
+                    bool hasNullKey2;
+                    materializationContext2 = new MaterializationContext(
+                        [LIFTABLE Constant: ValueBuffer | Resolver: _ => (object)ValueBuffer.Empty], 
+                        queryContext.Context
+                    );
+                    instance2 = default(InvoiceLine);
+                    entry2 = queryContext.TryGetEntry(
+                        key: [LIFTABLE Constant: Key: InvoiceLine.Id PK | Resolver: c => c.Dependencies.Model.FindEntityType("EFacture.API.Models.InvoiceLine").FindPrimaryKey()], 
+                        keyValues: new object[]{ dataReader.IsDBNull(8) ? default(object) : (object)dataReader.GetInt32(8) }, 
+                        throwOnNullKey: False, 
+                        hasNullKey: hasNullKey2);
+                    !(hasNullKey2) ? entry2 != default(InternalEntityEntry) ? 
+                    {
+                        entityType2 = entry2.EntityType;
+                        return instance2 = (InvoiceLine)entry2.Entity;
+                    } : 
+                    {
+                        ISnapshot shadowSnapshot2;
+                        shadowSnapshot2 = [LIFTABLE Constant: Snapshot | Resolver: _ => Snapshot.Empty];
+                        entityType2 = [LIFTABLE Constant: EntityType: InvoiceLine | Resolver: namelessParameter{6} => namelessParameter{6}.Dependencies.Model.FindEntityType("EFacture.API.Models.InvoiceLine")];
+                        instance2 = switch (entityType2)
+                        {
+                            case [LIFTABLE Constant: EntityType: InvoiceLine | Resolver: namelessParameter{7} => namelessParameter{7}.Dependencies.Model.FindEntityType("EFacture.API.Models.InvoiceLine")]: 
+                                {
+                                    return 
+                                    {
+                                        InvoiceLine instance;
+                                        instance = new InvoiceLine();
+                                        instance.<Id>k__BackingField = dataReader.IsDBNull(8) ? default(int) : dataReader.GetInt32(8);
+                                        instance.<Description>k__BackingField = dataReader.IsDBNull(9) ? default(string) : dataReader.GetString(9);
+                                        instance.<InvoiceId>k__BackingField = dataReader.IsDBNull(10) ? default(int) : dataReader.GetInt32(10);
+                                        instance.<Quantity>k__BackingField = dataReader.IsDBNull(11) ? default(decimal) : dataReader.GetDecimal(11);
+                                        instance.<UnitPrice>k__BackingField = dataReader.IsDBNull(12) ? default(decimal) : dataReader.GetDecimal(12);
+                                        (instance is IInjectableService) ? ((IInjectableService)instance).Injected(
+                                            context: materializationContext2.Context, 
+                                            entity: instance, 
+                                            queryTrackingBehavior: TrackAll, 
+                                            structuralType: [LIFTABLE Constant: EntityType: InvoiceLine | Resolver: namelessParameter{8} => namelessParameter{8}.Dependencies.Model.FindEntityType("EFacture.API.Models.InvoiceLine")]) : default(void);
+                                        return instance;
+                                    }}
+                            default: 
+                                default(InvoiceLine)
+                        }
+                        ;
+                        entry2 = entityType2 == default(IEntityType) ? default(InternalEntityEntry) : queryContext.StartTracking(
+                            entityType: entityType2, 
+                            entity: instance2, 
+                            snapshot: shadowSnapshot2);
+                        return instance2;
+                    } : default(void);
+                    return instance2;
+                };
+                return entity;
+            }, 
+            inverseNavigation: [LIFTABLE Constant: Navigation: InvoiceLine.Invoice (Invoice) ToPrincipal Invoice Inverse: Lines | Resolver: namelessParameter{9} => namelessParameter{9}.Dependencies.Model.FindEntityType("EFacture.API.Models.InvoiceLine").FindNavigation("Invoice")], 
+            fixup: (namelessParameter{10}, namelessParameter{11}) => 
+            {
+                [LIFTABLE Constant: ClrICollectionAccessor<Invoice, List<InvoiceLine>, InvoiceLine> | Resolver: namelessParameter{12} => namelessParameter{12}.Dependencies.Model.FindEntityType("EFacture.API.Models.Invoice").FindNavigation("Lines").GetCollectionAccessor()].Add(
+                    entity: namelessParameter{10}, 
+                    value: namelessParameter{11}, 
+                    forMaterialization: True);
+                return namelessParameter{11}.<Invoice>k__BackingField = namelessParameter{10};
+            }, 
+            trackingQuery: True);
+        return IsTrue(resultCoordinator.ResultReady)
+         ? (Invoice)(resultContext.Values[0]) : default(Invoice);
+    }, 
+    contextType: EFacture.API.Data.EFactureDbContext, 
+    standAloneStateManager: False, 
+    detailedErrorsEnabled: False, 
+    threadSafetyChecksEnabled: True)'
+2025-06-08 06:40:51.191 +01:00 [DBG] Creating DbConnection.
+2025-06-08 06:40:51.192 +01:00 [DBG] Created DbConnection. (1ms).
+2025-06-08 06:40:51.194 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:40:51.195 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:40:51.197 +01:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2025-06-08 06:40:51.198 +01:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2025-06-08 06:40:51.200 +01:00 [DBG] Initialized DbCommand for 'ExecuteReader' (3ms).
+2025-06-08 06:40:51.201 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "i"."Id", "i"."CustomerName", "i"."Date", "i"."InvoiceNumber", "i"."Status", "i"."SubTotal", "i"."Total", "i"."VAT", "i0"."Id", "i0"."Description", "i0"."InvoiceId", "i0"."Quantity", "i0"."UnitPrice"
+FROM "Invoices" AS "i"
+LEFT JOIN "InvoiceLines" AS "i0" ON "i"."Id" = "i0"."InvoiceId"
+ORDER BY "i"."Id"
+2025-06-08 06:40:51.205 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "i"."Id", "i"."CustomerName", "i"."Date", "i"."InvoiceNumber", "i"."Status", "i"."SubTotal", "i"."Total", "i"."VAT", "i0"."Id", "i0"."Description", "i0"."InvoiceId", "i0"."Quantity", "i0"."UnitPrice"
+FROM "Invoices" AS "i"
+LEFT JOIN "InvoiceLines" AS "i0" ON "i"."Id" = "i0"."InvoiceId"
+ORDER BY "i"."Id"
+2025-06-08 06:40:51.221 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.263 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.273 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.276 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.278 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.279 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.281 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.284 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.286 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.288 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.289 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.291 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.294 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.296 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.298 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.300 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.302 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.304 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.308 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.310 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.311 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.314 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.316 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.318 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.319 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.321 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.325 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.327 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.329 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.331 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.333 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.335 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.338 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.340 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.341 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.345 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.347 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.349 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.350 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.355 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.357 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.359 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.361 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.363 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.365 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.369 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.371 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.373 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.378 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.380 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.382 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.385 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.387 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.390 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.392 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.395 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.398 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.400 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.403 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.406 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.407 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.409 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.412 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.416 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.418 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.420 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.422 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.424 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.426 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.428 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.431 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.434 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.438 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.440 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.441 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.446 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.448 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.449 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.451 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.453 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.455 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.456 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.458 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.460 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.462 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.465 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.466 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.468 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.470 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.471 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.473 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.476 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.480 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.483 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.485 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.487 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.488 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.490 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.492 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.495 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.496 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'Invoice' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.498 +01:00 [DBG] Context 'EFactureDbContext' started tracking 'InvoiceLine' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2025-06-08 06:40:51.500 +01:00 [DBG] Closing data reader to 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:40:51.501 +01:00 [DBG] A data reader for 'main' on server 'S:\EFacture.API\efacture.db' is being disposed after spending 293ms reading results.
+2025-06-08 06:40:51.503 +01:00 [DBG] Closing connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 06:40:51.505 +01:00 [DBG] Closed connection to database 'main' on server 'efacture.db' (1ms).
+2025-06-08 06:40:51.518 +01:00 [INF] Executed endpoint 'HTTP: GET /api/invoices'
+2025-06-08 06:40:51.519 +01:00 [INF] HTTP GET /api/invoices responded 200 in 570.3641 ms
+2025-06-08 06:40:51.522 +01:00 [DBG] Connection id "0HND69M1H3REE" completed keep alive response.
+2025-06-08 06:40:51.524 +01:00 [DBG] 'EFactureDbContext' disposed.
+2025-06-08 06:40:51.525 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 06:40:51.526 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (1ms).
+2025-06-08 06:40:51.528 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5246/api/invoices - 200 null application/json; charset=utf-8 587.6664ms
+2025-06-08 06:40:57.826 +01:00 [DBG] Connection id "0HND69M1H3REE" received FIN.
+2025-06-08 06:40:57.827 +01:00 [DBG] Connection id "0HND69M1H3REE" sending FIN because: "The Socket transport's send loop completed gracefully."
+2025-06-08 06:40:57.829 +01:00 [DBG] Connection id "0HND69M1H3REE" disconnecting.
+2025-06-08 06:40:57.832 +01:00 [DBG] Connection id "0HND69M1H3REE" stopped.
+2025-06-08 06:41:08.146 +01:00 [DBG] Connection id "0HND69M1H3REF" accepted.
+2025-06-08 06:41:08.148 +01:00 [DBG] Connection id "0HND69M1H3REF" started.
+2025-06-08 06:41:08.149 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5246/api/invoices/511/pdf-url - null null
+2025-06-08 06:41:08.152 +01:00 [DBG] 1 candidate(s) found for the request path '/api/invoices/511/pdf-url'
+2025-06-08 06:41:08.153 +01:00 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2025-06-08 06:41:08.155 +01:00 [DBG] The request has an origin header: 'http://localhost:3000'.
+2025-06-08 06:41:08.156 +01:00 [INF] CORS policy execution successful.
+2025-06-08 06:41:08.157 +01:00 [DBG] The request is a preflight request.
+2025-06-08 06:41:08.157 +01:00 [INF] HTTP OPTIONS /api/invoices/511/pdf-url responded 204 in 2.8818 ms
+2025-06-08 06:41:08.159 +01:00 [DBG] Connection id "0HND69M1H3REF" completed keep alive response.
+2025-06-08 06:41:08.161 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5246/api/invoices/511/pdf-url - 204 null null 11.338ms
+2025-06-08 06:41:08.164 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5246/api/invoices/511/pdf-url - null null
+2025-06-08 06:41:08.167 +01:00 [DBG] 1 candidate(s) found for the request path '/api/invoices/511/pdf-url'
+2025-06-08 06:41:08.171 +01:00 [DBG] Endpoint 'HTTP: GET /api/invoices/{id:int}/pdf-url' with route pattern '/api/invoices/{id:int}/pdf-url' is valid for the request path '/api/invoices/511/pdf-url'
+2025-06-08 06:41:08.174 +01:00 [DBG] Request matched endpoint 'HTTP: GET /api/invoices/{id:int}/pdf-url'
+2025-06-08 06:41:08.175 +01:00 [DBG] The request has an origin header: 'http://localhost:3000'.
+2025-06-08 06:41:08.176 +01:00 [INF] CORS policy execution successful.
+2025-06-08 06:41:08.177 +01:00 [DBG] Successfully validated the token.
+2025-06-08 06:41:08.178 +01:00 [DBG] AuthenticationScheme: Bearer was successfully authenticated.
+2025-06-08 06:41:08.180 +01:00 [DBG] Authorization was successful.
+2025-06-08 06:41:08.181 +01:00 [INF] Executing endpoint 'HTTP: GET /api/invoices/{id:int}/pdf-url'
+2025-06-08 06:41:08.210 +01:00 [INF] Setting HTTP status code 200.
+2025-06-08 06:41:08.212 +01:00 [INF] Writing value of type '<>f__AnonymousType12`1' as Json.
+2025-06-08 06:41:08.214 +01:00 [INF] Executed endpoint 'HTTP: GET /api/invoices/{id:int}/pdf-url'
+2025-06-08 06:41:08.215 +01:00 [INF] HTTP GET /api/invoices/511/pdf-url responded 200 in 40.4855 ms
+2025-06-08 06:41:08.217 +01:00 [DBG] Connection id "0HND69M1H3REF" completed keep alive response.
+2025-06-08 06:41:08.218 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5246/api/invoices/511/pdf-url - 200 null application/json; charset=utf-8 54.5657ms
+2025-06-08 06:41:17.860 +01:00 [DBG] Connection id "0HND69M1H3REF" received FIN.
+2025-06-08 06:41:17.862 +01:00 [DBG] Connection id "0HND69M1H3REF" sending FIN because: "The Socket transport's send loop completed gracefully."
+2025-06-08 06:41:17.866 +01:00 [DBG] Connection id "0HND69M1H3REF" disconnecting.
+2025-06-08 06:41:17.868 +01:00 [DBG] Connection id "0HND69M1H3REF" stopped.
+2025-06-08 06:41:47.910 +01:00 [DBG] Connection id "0HND69M1H3REG" accepted.
+2025-06-08 06:41:47.918 +01:00 [DBG] Connection id "0HND69M1H3REG" started.
+2025-06-08 06:41:47.919 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5246/api/invoices/512/pdf-url - null null
+2025-06-08 06:41:47.922 +01:00 [DBG] 1 candidate(s) found for the request path '/api/invoices/512/pdf-url'
+2025-06-08 06:41:47.923 +01:00 [DBG] Request matched endpoint '405 HTTP Method Not Supported'
+2025-06-08 06:41:47.925 +01:00 [DBG] The request has an origin header: 'http://localhost:3000'.
+2025-06-08 06:41:47.926 +01:00 [INF] CORS policy execution successful.
+2025-06-08 06:41:47.927 +01:00 [DBG] The request is a preflight request.
+2025-06-08 06:41:47.929 +01:00 [INF] HTTP OPTIONS /api/invoices/512/pdf-url responded 204 in 4.5955 ms
+2025-06-08 06:41:47.934 +01:00 [DBG] Connection id "0HND69M1H3REG" completed keep alive response.
+2025-06-08 06:41:47.936 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5246/api/invoices/512/pdf-url - 204 null null 16.4734ms
+2025-06-08 06:41:47.945 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5246/api/invoices/512/pdf-url - null null
+2025-06-08 06:41:47.947 +01:00 [DBG] 1 candidate(s) found for the request path '/api/invoices/512/pdf-url'
+2025-06-08 06:41:47.949 +01:00 [DBG] Endpoint 'HTTP: GET /api/invoices/{id:int}/pdf-url' with route pattern '/api/invoices/{id:int}/pdf-url' is valid for the request path '/api/invoices/512/pdf-url'
+2025-06-08 06:41:47.951 +01:00 [DBG] Request matched endpoint 'HTTP: GET /api/invoices/{id:int}/pdf-url'
+2025-06-08 06:41:47.952 +01:00 [DBG] The request has an origin header: 'http://localhost:3000'.
+2025-06-08 06:41:47.953 +01:00 [INF] CORS policy execution successful.
+2025-06-08 06:41:47.954 +01:00 [DBG] Successfully validated the token.
+2025-06-08 06:41:47.955 +01:00 [DBG] AuthenticationScheme: Bearer was successfully authenticated.
+2025-06-08 06:41:47.958 +01:00 [DBG] Authorization was successful.
+2025-06-08 06:41:47.958 +01:00 [INF] Executing endpoint 'HTTP: GET /api/invoices/{id:int}/pdf-url'
+2025-06-08 06:41:47.961 +01:00 [INF] Setting HTTP status code 200.
+2025-06-08 06:41:47.962 +01:00 [INF] Writing value of type '<>f__AnonymousType12`1' as Json.
+2025-06-08 06:41:47.963 +01:00 [INF] Executed endpoint 'HTTP: GET /api/invoices/{id:int}/pdf-url'
+2025-06-08 06:41:47.964 +01:00 [INF] HTTP GET /api/invoices/512/pdf-url responded 200 in 12.7399 ms
+2025-06-08 06:41:47.966 +01:00 [DBG] Connection id "0HND69M1H3REG" completed keep alive response.
+2025-06-08 06:41:47.967 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5246/api/invoices/512/pdf-url - 200 null application/json; charset=utf-8 22.7239ms
+2025-06-08 06:41:57.898 +01:00 [DBG] Connection id "0HND69M1H3REG" received FIN.
+2025-06-08 06:41:57.900 +01:00 [DBG] Connection id "0HND69M1H3REG" sending FIN because: "The Socket transport's send loop completed gracefully."
+2025-06-08 06:41:57.906 +01:00 [DBG] Connection id "0HND69M1H3REG" disconnecting.
+2025-06-08 06:41:57.907 +01:00 [DBG] Connection id "0HND69M1H3REG" stopped.
+2025-06-08 07:20:41.223 +01:00 [DBG] An 'IServiceProvider' was created for internal use by Entity Framework.
+2025-06-08 07:20:41.543 +01:00 [DBG] The index {'ApplicationUserId'} was not created on entity type 'Invoice' as the properties are already covered by the index {'ApplicationUserId', 'Date'}.
+2025-06-08 07:20:41.546 +01:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserRole<string>' as the properties are already covered by the index {'UserId', 'RoleId'}.
+2025-06-08 07:20:41.548 +01:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserToken<string>' as the properties are already covered by the index {'UserId', 'LoginProvider', 'Name'}.
+2025-06-08 07:20:41.675 +01:00 [DBG] Entity Framework Core 9.0.5 initialized 'EFactureDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite:9.0.5' with options: None
+2025-06-08 07:20:43.121 +01:00 [DBG] 'EFactureDbContext' disposed.
+2025-06-08 07:22:34.491 +01:00 [DBG] An 'IServiceProvider' was created for internal use by Entity Framework.
+2025-06-08 07:22:34.816 +01:00 [DBG] The index {'ApplicationUserId'} was not created on entity type 'Invoice' as the properties are already covered by the index {'ApplicationUserId', 'Date'}.
+2025-06-08 07:22:34.819 +01:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserRole<string>' as the properties are already covered by the index {'UserId', 'RoleId'}.
+2025-06-08 07:22:34.821 +01:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserToken<string>' as the properties are already covered by the index {'UserId', 'LoginProvider', 'Name'}.
+2025-06-08 07:22:34.971 +01:00 [DBG] Entity Framework Core 9.0.5 initialized 'EFactureDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite:9.0.5' with options: None
+2025-06-08 07:22:35.093 +01:00 [DBG] Creating DbConnection.
+2025-06-08 07:22:35.106 +01:00 [DBG] Created DbConnection. (11ms).
+2025-06-08 07:22:35.111 +01:00 [DBG] Migrating using database 'main' on server 'efacture.db'.
+2025-06-08 07:22:35.118 +01:00 [DBG] Creating DbConnection.
+2025-06-08 07:22:35.121 +01:00 [DBG] Created DbConnection. (2ms).
+2025-06-08 07:22:35.123 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:22:35.137 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:22:35.141 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:22:35.145 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (2ms).
+2025-06-08 07:22:35.147 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:22:35.150 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:22:35.152 +01:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-06-08 07:22:35.158 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 07:22:35.164 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (5ms).
+2025-06-08 07:22:35.167 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (10ms).
+2025-06-08 07:22:35.173 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2025-06-08 07:22:35.191 +01:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2025-06-08 07:22:35.195 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 07:22:35.196 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (1ms).
+2025-06-08 07:22:35.198 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (2ms).
+2025-06-08 07:22:35.200 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2025-06-08 06:22:35.1954055+00:00');
+SELECT changes();
+2025-06-08 07:22:35.204 +01:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2025-06-08 06:22:35.1954055+00:00');
+SELECT changes();
+2025-06-08 07:22:35.254 +01:00 [DBG] Beginning transaction with isolation level 'Unspecified'.
+2025-06-08 07:22:35.258 +01:00 [DBG] Began transaction with isolation level 'Serializable'.
+2025-06-08 07:22:35.261 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:22:35.263 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:22:35.265 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (3ms).
+2025-06-08 07:22:35.267 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2025-06-08 07:22:35.270 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2025-06-08 07:22:35.274 +01:00 [DBG] Committing transaction.
+2025-06-08 07:22:35.276 +01:00 [DBG] Committed transaction.
+2025-06-08 07:22:35.279 +01:00 [DBG] Disposing transaction.
+2025-06-08 07:22:35.281 +01:00 [DBG] Beginning transaction with isolation level 'Unspecified'.
+2025-06-08 07:22:35.283 +01:00 [DBG] Began transaction with isolation level 'Serializable'.
+2025-06-08 07:22:35.285 +01:00 [DBG] Creating DbConnection.
+2025-06-08 07:22:35.287 +01:00 [DBG] Created DbConnection. (1ms).
+2025-06-08 07:22:35.288 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:22:35.290 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:22:35.292 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:22:35.293 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (1ms).
+2025-06-08 07:22:35.295 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 07:22:35.296 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (1ms).
+2025-06-08 07:22:35.298 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (2ms).
+2025-06-08 07:22:35.299 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2025-06-08 07:22:35.302 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2025-06-08 07:22:35.306 +01:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2025-06-08 07:22:35.307 +01:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2025-06-08 07:22:35.309 +01:00 [DBG] Initialized DbCommand for 'ExecuteReader' (2ms).
+2025-06-08 07:22:35.311 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-06-08 07:22:35.313 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-06-08 07:22:35.319 +01:00 [DBG] Closing data reader to 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:22:35.322 +01:00 [DBG] A data reader for 'main' on server 'S:\EFacture.API\efacture.db' is being disposed after spending 4ms reading results.
+2025-06-08 07:22:35.328 +01:00 [INF] Applying migration '20250608062043_LinkInvoiceToUser'.
+2025-06-08 07:22:35.347 +01:00 [WRN] The migration operation 'PRAGMA foreign_keys = 0;
+' from migration 'LinkInvoiceToUser' cannot be executed in a transaction. If the app is terminated or an unrecoverable error occurs while this operation is being executed then the migration will be left in a partially applied state and would need to be reverted manually before it can be applied again. Create a separate migration that contains just this operation.
+2025-06-08 07:22:35.350 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:22:35.351 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:22:35.352 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:22:35.354 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Invoices" ADD "ApplicationUserId" TEXT NOT NULL DEFAULT '';
+2025-06-08 07:22:35.357 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Invoices" ADD "ApplicationUserId" TEXT NOT NULL DEFAULT '';
+2025-06-08 07:22:35.359 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:22:35.360 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:22:35.362 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:22:35.363 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Invoices_ApplicationUserId_Date" ON "Invoices" ("ApplicationUserId", "Date");
+2025-06-08 07:22:35.365 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Invoices_ApplicationUserId_Date" ON "Invoices" ("ApplicationUserId", "Date");
+2025-06-08 07:22:35.368 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:22:35.369 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:22:35.370 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:22:35.372 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Invoices" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_Invoices" PRIMARY KEY AUTOINCREMENT,
+    "ApplicationUserId" TEXT NOT NULL,
+    "CustomerName" TEXT NOT NULL,
+    "Date" TEXT NOT NULL,
+    "InvoiceNumber" TEXT NOT NULL,
+    "Status" INTEGER NOT NULL,
+    "SubTotal" TEXT NOT NULL,
+    "Total" TEXT NOT NULL,
+    "VAT" TEXT NOT NULL,
+    CONSTRAINT "FK_Invoices_AspNetUsers_ApplicationUserId" FOREIGN KEY ("ApplicationUserId") REFERENCES "AspNetUsers" ("Id") ON DELETE RESTRICT
+);
+2025-06-08 07:22:35.374 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Invoices" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_Invoices" PRIMARY KEY AUTOINCREMENT,
+    "ApplicationUserId" TEXT NOT NULL,
+    "CustomerName" TEXT NOT NULL,
+    "Date" TEXT NOT NULL,
+    "InvoiceNumber" TEXT NOT NULL,
+    "Status" INTEGER NOT NULL,
+    "SubTotal" TEXT NOT NULL,
+    "Total" TEXT NOT NULL,
+    "VAT" TEXT NOT NULL,
+    CONSTRAINT "FK_Invoices_AspNetUsers_ApplicationUserId" FOREIGN KEY ("ApplicationUserId") REFERENCES "AspNetUsers" ("Id") ON DELETE RESTRICT
+);
+2025-06-08 07:22:35.377 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:22:35.378 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:22:35.380 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (3ms).
+2025-06-08 07:22:35.382 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Invoices" ("Id", "ApplicationUserId", "CustomerName", "Date", "InvoiceNumber", "Status", "SubTotal", "Total", "VAT")
+SELECT "Id", "ApplicationUserId", "CustomerName", "Date", "InvoiceNumber", "Status", "SubTotal", "Total", "VAT"
+FROM "Invoices";
+2025-06-08 07:22:35.386 +01:00 [ERR] Failed executing DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Invoices" ("Id", "ApplicationUserId", "CustomerName", "Date", "InvoiceNumber", "Status", "SubTotal", "Total", "VAT")
+SELECT "Id", "ApplicationUserId", "CustomerName", "Date", "InvoiceNumber", "Status", "SubTotal", "Total", "VAT"
+FROM "Invoices";
+2025-06-08 07:22:35.389 +01:00 [DBG] Disposing transaction.
+2025-06-08 07:22:35.391 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 07:22:35.392 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (1ms).
+2025-06-08 07:22:35.393 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (2ms).
+2025-06-08 07:22:35.394 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2025-06-08 07:22:35.398 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2025-06-08 07:22:35.401 +01:00 [DBG] Closing connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:22:35.404 +01:00 [DBG] Closed connection to database 'main' on server 'efacture.db' (3ms).
+2025-06-08 07:22:35.406 +01:00 [DBG] 'EFactureDbContext' disposed.
+2025-06-08 07:22:35.408 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:22:35.410 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (1ms).
+2025-06-08 07:25:28.026 +01:00 [DBG] An 'IServiceProvider' was created for internal use by Entity Framework.
+2025-06-08 07:25:28.346 +01:00 [DBG] The index {'ApplicationUserId'} was not created on entity type 'Invoice' as the properties are already covered by the index {'ApplicationUserId', 'Date'}.
+2025-06-08 07:25:28.349 +01:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserRole<string>' as the properties are already covered by the index {'UserId', 'RoleId'}.
+2025-06-08 07:25:28.351 +01:00 [DBG] The index {'UserId'} was not created on entity type 'IdentityUserToken<string>' as the properties are already covered by the index {'UserId', 'LoginProvider', 'Name'}.
+2025-06-08 07:25:28.475 +01:00 [DBG] Entity Framework Core 9.0.5 initialized 'EFactureDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite:9.0.5' with options: None
+2025-06-08 07:25:28.573 +01:00 [DBG] Creating DbConnection.
+2025-06-08 07:25:28.583 +01:00 [DBG] Created DbConnection. (8ms).
+2025-06-08 07:25:28.588 +01:00 [DBG] Migrating using database 'main' on server 'efacture.db'.
+2025-06-08 07:25:28.592 +01:00 [DBG] Creating DbConnection.
+2025-06-08 07:25:28.595 +01:00 [DBG] Created DbConnection. (2ms).
+2025-06-08 07:25:28.597 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:25:28.605 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:25:28.610 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:25:28.614 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (2ms).
+2025-06-08 07:25:28.616 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:25:28.619 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:25:28.622 +01:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-06-08 07:25:28.629 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 07:25:28.634 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (4ms).
+2025-06-08 07:25:28.637 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (10ms).
+2025-06-08 07:25:28.644 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2025-06-08 07:25:28.677 +01:00 [INF] Executed DbCommand (32ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2025-06-08 07:25:28.681 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 07:25:28.683 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (1ms).
+2025-06-08 07:25:28.684 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (2ms).
+2025-06-08 07:25:28.685 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2025-06-08 06:25:28.6815222+00:00');
+SELECT changes();
+2025-06-08 07:25:28.690 +01:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2025-06-08 06:25:28.6815222+00:00');
+SELECT changes();
+2025-06-08 07:25:28.738 +01:00 [DBG] Beginning transaction with isolation level 'Unspecified'.
+2025-06-08 07:25:28.741 +01:00 [DBG] Began transaction with isolation level 'Serializable'.
+2025-06-08 07:25:28.743 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.745 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.746 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.748 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2025-06-08 07:25:28.751 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2025-06-08 07:25:28.754 +01:00 [DBG] Committing transaction.
+2025-06-08 07:25:28.756 +01:00 [DBG] Committed transaction.
+2025-06-08 07:25:28.759 +01:00 [DBG] Disposing transaction.
+2025-06-08 07:25:28.761 +01:00 [DBG] Beginning transaction with isolation level 'Unspecified'.
+2025-06-08 07:25:28.762 +01:00 [DBG] Began transaction with isolation level 'Serializable'.
+2025-06-08 07:25:28.765 +01:00 [DBG] Creating DbConnection.
+2025-06-08 07:25:28.766 +01:00 [DBG] Created DbConnection. (0ms).
+2025-06-08 07:25:28.767 +01:00 [DBG] Opening connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:25:28.769 +01:00 [DBG] Opened connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:25:28.771 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:25:28.772 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (1ms).
+2025-06-08 07:25:28.774 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 07:25:28.776 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (1ms).
+2025-06-08 07:25:28.777 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (3ms).
+2025-06-08 07:25:28.779 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2025-06-08 07:25:28.781 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2025-06-08 07:25:28.785 +01:00 [DBG] Creating DbCommand for 'ExecuteReader'.
+2025-06-08 07:25:28.786 +01:00 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2025-06-08 07:25:28.788 +01:00 [DBG] Initialized DbCommand for 'ExecuteReader' (2ms).
+2025-06-08 07:25:28.790 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-06-08 07:25:28.793 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-06-08 07:25:28.798 +01:00 [DBG] Closing data reader to 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:25:28.800 +01:00 [DBG] A data reader for 'main' on server 'S:\EFacture.API\efacture.db' is being disposed after spending 4ms reading results.
+2025-06-08 07:25:28.806 +01:00 [INF] Applying migration '20250608062043_LinkInvoiceToUser'.
+2025-06-08 07:25:28.824 +01:00 [WRN] The migration operation 'PRAGMA foreign_keys = 0;
+' from migration 'LinkInvoiceToUser' cannot be executed in a transaction. If the app is terminated or an unrecoverable error occurs while this operation is being executed then the migration will be left in a partially applied state and would need to be reverted manually before it can be applied again. Create a separate migration that contains just this operation.
+2025-06-08 07:25:28.826 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.827 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.829 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (3ms).
+2025-06-08 07:25:28.830 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Invoices" ADD "ApplicationUserId" TEXT NOT NULL DEFAULT '';
+2025-06-08 07:25:28.832 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Invoices" ADD "ApplicationUserId" TEXT NOT NULL DEFAULT '';
+2025-06-08 07:25:28.834 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.835 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.837 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.838 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Invoices_ApplicationUserId_Date" ON "Invoices" ("ApplicationUserId", "Date");
+2025-06-08 07:25:28.840 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Invoices_ApplicationUserId_Date" ON "Invoices" ("ApplicationUserId", "Date");
+2025-06-08 07:25:28.843 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.844 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.845 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.847 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Invoices" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_Invoices" PRIMARY KEY AUTOINCREMENT,
+    "ApplicationUserId" TEXT NOT NULL,
+    "CustomerName" TEXT NOT NULL,
+    "Date" TEXT NOT NULL,
+    "InvoiceNumber" TEXT NOT NULL,
+    "Status" INTEGER NOT NULL,
+    "SubTotal" TEXT NOT NULL,
+    "Total" TEXT NOT NULL,
+    "VAT" TEXT NOT NULL,
+    CONSTRAINT "FK_Invoices_AspNetUsers_ApplicationUserId" FOREIGN KEY ("ApplicationUserId") REFERENCES "AspNetUsers" ("Id") ON DELETE RESTRICT
+);
+2025-06-08 07:25:28.849 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "ef_temp_Invoices" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_Invoices" PRIMARY KEY AUTOINCREMENT,
+    "ApplicationUserId" TEXT NOT NULL,
+    "CustomerName" TEXT NOT NULL,
+    "Date" TEXT NOT NULL,
+    "InvoiceNumber" TEXT NOT NULL,
+    "Status" INTEGER NOT NULL,
+    "SubTotal" TEXT NOT NULL,
+    "Total" TEXT NOT NULL,
+    "VAT" TEXT NOT NULL,
+    CONSTRAINT "FK_Invoices_AspNetUsers_ApplicationUserId" FOREIGN KEY ("ApplicationUserId") REFERENCES "AspNetUsers" ("Id") ON DELETE RESTRICT
+);
+2025-06-08 07:25:28.852 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.853 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.854 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.856 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Invoices" ("Id", "ApplicationUserId", "CustomerName", "Date", "InvoiceNumber", "Status", "SubTotal", "Total", "VAT")
+SELECT "Id", "ApplicationUserId", "CustomerName", "Date", "InvoiceNumber", "Status", "SubTotal", "Total", "VAT"
+FROM "Invoices";
+2025-06-08 07:25:28.858 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Invoices" ("Id", "ApplicationUserId", "CustomerName", "Date", "InvoiceNumber", "Status", "SubTotal", "Total", "VAT")
+SELECT "Id", "ApplicationUserId", "CustomerName", "Date", "InvoiceNumber", "Status", "SubTotal", "Total", "VAT"
+FROM "Invoices";
+2025-06-08 07:25:28.860 +01:00 [DBG] Committing transaction.
+2025-06-08 07:25:28.862 +01:00 [DBG] Committed transaction.
+2025-06-08 07:25:28.863 +01:00 [DBG] Disposing transaction.
+2025-06-08 07:25:28.864 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.865 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.866 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.868 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 0;
+2025-06-08 07:25:28.870 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 0;
+2025-06-08 07:25:28.872 +01:00 [DBG] Beginning transaction with isolation level 'Unspecified'.
+2025-06-08 07:25:28.873 +01:00 [DBG] Began transaction with isolation level 'Serializable'.
+2025-06-08 07:25:28.875 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.876 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.877 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.879 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE "Invoices";
+2025-06-08 07:25:28.881 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE "Invoices";
+2025-06-08 07:25:28.883 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.885 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.886 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.887 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "ef_temp_Invoices" RENAME TO "Invoices";
+2025-06-08 07:25:28.891 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "ef_temp_Invoices" RENAME TO "Invoices";
+2025-06-08 07:25:28.893 +01:00 [DBG] Committing transaction.
+2025-06-08 07:25:28.894 +01:00 [DBG] Committed transaction.
+2025-06-08 07:25:28.895 +01:00 [DBG] Disposing transaction.
+2025-06-08 07:25:28.897 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.898 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.899 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.901 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 1;
+2025-06-08 07:25:28.903 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA foreign_keys = 1;
+2025-06-08 07:25:28.905 +01:00 [DBG] Beginning transaction with isolation level 'Unspecified'.
+2025-06-08 07:25:28.907 +01:00 [DBG] Began transaction with isolation level 'Serializable'.
+2025-06-08 07:25:28.908 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.909 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.911 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.912 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Invoices_ApplicationUserId_Date" ON "Invoices" ("ApplicationUserId", "Date");
+2025-06-08 07:25:28.914 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Invoices_ApplicationUserId_Date" ON "Invoices" ("ApplicationUserId", "Date");
+2025-06-08 07:25:28.916 +01:00 [DBG] Committing transaction.
+2025-06-08 07:25:28.918 +01:00 [DBG] Committed transaction.
+2025-06-08 07:25:28.919 +01:00 [DBG] Disposing transaction.
+2025-06-08 07:25:28.920 +01:00 [DBG] Creating DbCommand for 'ExecuteNonQuery'.
+2025-06-08 07:25:28.921 +01:00 [DBG] Created DbCommand for 'ExecuteNonQuery' (1ms).
+2025-06-08 07:25:28.923 +01:00 [DBG] Initialized DbCommand for 'ExecuteNonQuery' (2ms).
+2025-06-08 07:25:28.924 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20250608062043_LinkInvoiceToUser', '9.0.5');
+2025-06-08 07:25:28.927 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20250608062043_LinkInvoiceToUser', '9.0.5');
+2025-06-08 07:25:28.929 +01:00 [DBG] Creating DbCommand for 'ExecuteScalar'.
+2025-06-08 07:25:28.930 +01:00 [DBG] Created DbCommand for 'ExecuteScalar' (1ms).
+2025-06-08 07:25:28.932 +01:00 [DBG] Initialized DbCommand for 'ExecuteScalar' (2ms).
+2025-06-08 07:25:28.933 +01:00 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2025-06-08 07:25:28.935 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2025-06-08 07:25:28.939 +01:00 [DBG] Closing connection to database 'main' on server 'S:\EFacture.API\efacture.db'.
+2025-06-08 07:25:28.942 +01:00 [DBG] Closed connection to database 'main' on server 'efacture.db' (4ms).
+2025-06-08 07:25:28.945 +01:00 [DBG] 'EFactureDbContext' disposed.
+2025-06-08 07:25:28.946 +01:00 [DBG] Disposing connection to database 'main' on server 'efacture.db'.
+2025-06-08 07:25:28.948 +01:00 [DBG] Disposed connection to database 'main' on server 'efacture.db' (1ms).

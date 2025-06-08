@@ -13,6 +13,10 @@
         public InvoiceStatus Status { get; set; } = InvoiceStatus.Ready;
 
         public List<InvoiceLine> Lines { get; set; } = new();
+
+
+        public string ApplicationUserId { get; set; } = null!;
+        public ApplicationUser ApplicationUser { get; set; } = null!;
     }
 
     public enum InvoiceStatus

@@ -4,6 +4,6 @@ namespace EFacture.API.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        // You can add extra properties here if needed
+        public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
     }
 }
