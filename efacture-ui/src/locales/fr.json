@@ -103,7 +103,12 @@
     "monthlyStats": "Statistiques mensuelles",
     "topCustomers": "Meilleurs clients",
     "recentInvoices": "Factures récentes",
-    "averageAmount": "Montant moyen"
+    "averageAmount": "Montant moyen",
+    "monthlyTrend": "Tendance mensuelle",
+    "statusDistribution": "Répartition des statuts",
+    "topCustomersByAmount": "Meilleurs clients par montant",
+    "monthlyAmount": "Montant mensuel",
+    "customerAmount": "Montant par client"
   },
   "invoice": {
     "create": "Créer une facture",

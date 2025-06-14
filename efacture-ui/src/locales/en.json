@@ -103,7 +103,12 @@
     "monthlyStats": "Monthly Statistics",
     "topCustomers": "Top Customers",
     "recentInvoices": "Recent Invoices",
-    "averageAmount": "Average Amount"
+    "averageAmount": "Average Amount",
+    "monthlyTrend": "Monthly Trend",
+    "statusDistribution": "Status Distribution",
+    "topCustomersByAmount": "Top Customers by Amount",
+    "monthlyAmount": "Monthly Amount",
+    "customerAmount": "Customer Amount"
   },
   "invoice": {
     "create": "Create Invoice",

@@ -12,12 +12,10 @@ obj/
 *.log
 *.backup
 *.publishsettings
+Logs
 
 invoices.csv
-minio-data/efacture/
-minio-data/
 minio-data
-./minio-data/
 
 # EF Migrations snapshot
 **/Migrations/*.cs
@@ -29,3 +27,9 @@ efacture-ui/.env
 # Yarn
 efacture-ui/.cache/
 efacture-ui/.pnp.*
+
+
+efacture.db
+efacture.db-shm
+efacture.db-wal
+invoices.csv

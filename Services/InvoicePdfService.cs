@@ -4,11 +4,7 @@ using QuestPDF.Infrastructure;
 using EFacture.API.Data;
 using Minio;
 using Microsoft.EntityFrameworkCore;
-using Minio.DataModel;
 using Minio.DataModel.Args;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using QRCoder;
 
 

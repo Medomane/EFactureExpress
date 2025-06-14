@@ -2,6 +2,32 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Invoice } from '../types';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line, Pie, Bar } from 'react-chartjs-2';
+
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface DashboardProps {
   invoices: Invoice[];
@@ -70,6 +96,84 @@ const Dashboard: React.FC<DashboardProps> = ({
   const topCustomers = Object.entries(customerStats)
     .sort(([, a], [, b]) => b.amount - a.amount)
     .slice(0, 5);
+
+  // Calculate total amount for percentage calculations
+  const totalCustomerAmount = topCustomers.reduce((sum, [, stats]) => sum + stats.amount, 0);
+
+  // Prepare data for monthly line chart
+  const monthlyChartData = {
+    labels: Object.keys(monthlyStats),
+    datasets: [
+      {
+        label: t('dashboard.monthlyAmount'),
+        data: Object.values(monthlyStats).map(stats => stats.amount),
+        borderColor: 'rgb(59, 130, 246)',
+        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+        tension: 0.4,
+      },
+    ],
+  };
+
+  // Calculate percentages for status distribution
+  const totalInvoices = readyInvoices.length + submittedInvoices.length;
+  const readyPercentage = totalInvoices > 0 ? (readyInvoices.length / totalInvoices) * 100 : 0;
+  const submittedPercentage = totalInvoices > 0 ? (submittedInvoices.length / totalInvoices) * 100 : 0;
+
+  // Prepare data for status pie chart
+  const statusData = {
+    labels: [
+      `${t('invoice.status.pending')} (${readyPercentage.toFixed(1)}%)`,
+      `${t('invoice.status.submitted')} (${submittedPercentage.toFixed(1)}%)`,
+    ],
+    datasets: [
+      {
+        data: [readyInvoices.length, submittedInvoices.length],
+        backgroundColor: [
+          'rgba(234, 179, 8, 0.8)',
+          'rgba(34, 197, 94, 0.8)',
+        ],
+        borderColor: [
+          'rgb(234, 179, 8)',
+          'rgb(34, 197, 94)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  // Prepare data for top customers bar chart
+  const topCustomersChartData = {
+    labels: topCustomers.map(([customer]) => customer),
+    datasets: [
+      {
+        label: t('dashboard.customerAmount'),
+        data: topCustomers.map(([, stats]) => stats.amount),
+        backgroundColor: 'rgba(99, 102, 241, 0.8)',
+        borderColor: 'rgb(99, 102, 241)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context: any) {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            const percentage = totalInvoices > 0 ? ((value / totalInvoices) * 100).toFixed(1) : 0;
+            return `${label}: ${value} (${percentage}%)`;
+          }
+        }
+      }
+    },
+  };
 
   if (loading) {
     return (
@@ -202,86 +306,74 @@ const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
-      {/* Monthly Statistics */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">{t('dashboard.monthlyStats')}</h2>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Monthly Trend Chart */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-medium text-gray-900">{t('dashboard.monthlyTrend')}</h2>
+          </div>
+          <div className="p-6">
+            <Line options={chartOptions} data={monthlyChartData} />
+          </div>
         </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {Object.entries(monthlyStats).map(([month, stats]) => (
-              <div key={month} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-200">
-                <h3 className="text-sm font-medium text-gray-600">{month}</h3>
-                <p className="text-lg font-semibold text-gray-900">{stats.count} {t('common.invoices')}</p>
-                <p className="text-sm text-gray-500">
-                  {formatCurrency(stats.amount)}
-                </p>
+
+        {/* Status Distribution Chart */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-medium text-gray-900">{t('dashboard.statusDistribution')}</h2>
+          </div>
+          <div className="p-6" style={{ height: '300px' }}>
+            <Pie options={chartOptions} data={statusData} />
+          </div>
+        </div>
+
+        {/* Top Customers Chart */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-medium text-gray-900">{t('dashboard.topCustomersByAmount')}</h2>
+          </div>
+          <div className="p-6">
+            <Bar options={chartOptions} data={topCustomersChartData} />
+          </div>
+        </div>
+
+        {/* Recent Invoices */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h2 className="text-lg font-medium text-gray-900">{t('dashboard.recentInvoices')}</h2>
+            <Link 
+              to="/invoices" 
+              className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-1"
+            >
+              {t('dashboard.viewAll')}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+          <div className="divide-y divide-gray-200">
+            {invoices.slice(0, 5).map((invoice) => (
+              <div key={invoice.id} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      {t('common.invoiceNumber')} {invoice.invoiceNumber}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(invoice.date).toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-medium text-gray-900">
+                      {formatCurrency(invoice.total)}
+                    </p>
+                    <p className="text-sm text-gray-500">{invoice.customerName}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* Top Customers */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">{t('dashboard.topCustomers')}</h2>
-        </div>
-        <div className="p-6">
-          <div className="space-y-4">
-            {topCustomers.map(([customer, stats], index) => (
-              <div key={customer} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-medium">
-                    {index + 1}
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-gray-900">{customer}</h3>
-                    <p className="text-sm text-gray-500">{stats.count} {t('common.invoices')}</p>
-                  </div>
-                </div>
-                <p className="text-sm font-medium text-gray-900">
-                  {formatCurrency(stats.amount)}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Invoices */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-lg font-medium text-gray-900">{t('dashboard.recentInvoices')}</h2>
-          <Link 
-            to="/invoices" 
-            className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-1"
-          >
-            {t('dashboard.viewAll')}
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-        <div className="divide-y divide-gray-200">
-          {invoices.slice(0, 5).map((invoice) => (
-            <div key={invoice.id} className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{t('common.invoiceNumber')} #{invoice.invoiceNumber}</p>
-                  <p className="text-sm text-gray-500">
-                    {new Date(invoice.date).toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">
-                    {formatCurrency(invoice.total)}
-                  </p>
-                  <p className="text-sm text-gray-500">{invoice.customerName}</p>
-                </div>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </div>
