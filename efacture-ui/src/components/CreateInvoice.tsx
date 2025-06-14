@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { NewInvoice, NewLine } from '../types';
-import { Link } from 'react-router-dom';
 
 interface CreateInvoiceProps {
   onSubmit: (invoice: NewInvoice) => Promise<void>;

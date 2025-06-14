@@ -98,7 +98,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     .slice(0, 5);
 
   // Calculate total amount for percentage calculations
-  const totalCustomerAmount = topCustomers.reduce((sum, [, stats]) => sum + stats.amount, 0);
+  //const totalCustomerAmount = topCustomers.reduce((sum, [, stats]) => sum + stats.amount, 0);
 
   // Prepare data for monthly line chart
   const monthlyChartData = {

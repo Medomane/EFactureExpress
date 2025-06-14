@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { APP_CONFIG } from '../config/app';
+import { Link } from 'react-router-dom';
 
 interface LoginPageProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -35,14 +36,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onToggleLanguage, curren
         <div className="text-center">
           <div className="flex justify-center mb-4">
             <img
-              src={APP_CONFIG.logo}
+              src={APP_CONFIG.logoH}
               alt={`${APP_CONFIG.title} Logo`}
-              className="h-16 w-16 transition-transform duration-300 hover:scale-110"
+              className="h-16 transition-transform duration-300 hover:scale-110"
             />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            {APP_CONFIG.title}
-          </h1>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -143,6 +141,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onToggleLanguage, curren
                 t('common.signInButton')
               )}
             </button>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">
+                {t('common.noAccount')}{' '}
+                <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
+                  {t('common.register')}
+                </Link>
+              </p>
+            </div>
           </div>
         </form>
       </div>

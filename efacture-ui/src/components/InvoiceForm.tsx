@@ -15,6 +15,7 @@ interface FormErrors {
   date?: string;
   customerName?: string;
   vatRate?: string;
+  status?: string;
   lines?: { [key: number]: { description?: string; quantity?: string; unitPrice?: string } };
 }
 
@@ -28,6 +29,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
   const [date, setDate] = useState(invoice?.date || new Date().toISOString().split('T')[0]);
   const [customerName, setCustomerName] = useState(invoice?.customerName || "");
   const [vatRate, setVatRate] = useState(20); // Default VAT rate of 20%
+  const [status, setStatus] = useState(invoice?.status || 0);
   const [lines, setLines] = useState<NewLine[]>(
     invoice?.lines || [{ description: "", quantity: 1, unitPrice: 0 }]
   );
@@ -76,6 +78,11 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
     // Validate VAT rate
     if (vatRate < 0 || vatRate > 100) {
       newErrors.vatRate = t('invoice.form.errors.vatRateRange');
+    }
+
+    // Validate status
+    if (status !== 0 && status !== 1) {
+      newErrors.status = t('invoice.form.errors.invalidStatus');
     }
 
     // Validate lines
@@ -237,7 +244,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
         subTotal,
         vat,
         total,
-        status: invoice?.status || 0,
+        status,
         lines: lines.map((ln) => ({
           description: ln.description,
           quantity: ln.quantity,
@@ -385,6 +392,33 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, onClose, invoice, d
               {(errors.vatRate || getInvoiceErrorMessage('vatRate')) && (
                 <div className="text-red-500 text-xs mt-1">
                   {errors.vatRate || getInvoiceErrorMessage('vatRate')}
+                </div>
+              )}
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm text-gray-600 mb-1">{t('invoice.form.status')}</label>
+              <select
+                value={status}
+                onChange={(e) => {
+                  setStatus(Number(e.target.value));
+                  if (errors.status) {
+                    setErrors(prev => ({ ...prev, status: undefined }));
+                  }
+                }}
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                  errors.status ? 'border-red-500' : 'border-gray-300'
+                }`}
+                disabled={disabled || isSubmitting || invoice?.status === 2}
+              >
+                <option value={0}>{t('invoice.status.draft')}</option>
+                <option value={1}>{t('invoice.status.ready')}</option>
+                {invoice?.status === 2 && (
+                  <option value={2}>{t('invoice.status.submitted')}</option>
+                )}
+              </select>
+              {errors.status && (
+                <div className="text-red-500 text-xs mt-1">
+                  {errors.status}
                 </div>
               )}
             </div>

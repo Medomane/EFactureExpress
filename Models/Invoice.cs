@@ -6,22 +6,26 @@
         public string InvoiceNumber { get; set; } = null!;
         public DateTime Date { get; set; }
         public string CustomerName { get; set; } = null!;
+
         public decimal SubTotal { get; set; }
         public decimal VAT { get; set; }
         public decimal Total { get; set; }
 
-        public InvoiceStatus Status { get; set; } = InvoiceStatus.Ready;
+        public InvoiceStatus Status { get; set; } = InvoiceStatus.Draft;
 
         public List<InvoiceLine> Lines { get; set; } = new();
 
+        public Guid CompanyId { get; set; }
+        public Company? Company { get; set; }
 
-        public string ApplicationUserId { get; set; } = null!;
-        public ApplicationUser ApplicationUser { get; set; } = null!;
+        public string? CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
     }
 
     public enum InvoiceStatus
     {
-        Ready = 0,
-        Submitted = 1
+        Draft,
+        Ready,
+        Submitted
     }
 }

@@ -1,6 +1,5 @@
 {
   "common": {
-    "signIn": "Sign in to your account",
     "email": "Email address",
     "password": "Password",
     "signInButton": "Sign in",
@@ -51,7 +50,21 @@
     "emailPlaceholder": "Enter your email",
     "passwordPlaceholder": "Enter your password",
     "signingIn": "Signing in...",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "register": "Register",
+    "registerButton": "Register",
+    "registering": "Registering...",
+    "companyName": "Company Name",
+    "companyNamePlaceholder": "Enter your company name",
+    "taxId": "Tax ID",
+    "taxIdPlaceholder": "Enter your tax ID",
+    "address": "Address",
+    "addressPlaceholder": "Enter your company address",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "noAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign in"
   },
   "errors": {
     "invalidCredentials": "Invalid credentials",
@@ -74,7 +87,13 @@
     "serverError": "Server error. Please try again later.",
     "unauthorized": "Unauthorized access. Please log in again.",
     "bulkActionFailed": "Failed to {{action}} invoices: {{error}}",
-    "unknown": "Unknown error"
+    "unknown": "Unknown error",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "registrationFailed": "Registration failed. Please try again.",
+    "emailAlreadyExists": "This email address is already registered.",
+    "taxIdAlreadyExists": "This Tax ID is already registered.",
+    "databaseError": "A database error occurred. Please try again.",
+    "validationFailed": "Please fix the validation errors below."
   },
   "success": {
     "invoiceCreated": "Invoice created successfully",
@@ -120,6 +139,7 @@
     "status": {
       "draft": "Draft",
       "pending": "Ready",
+      "ready": "Ready",
       "paid": "Paid",
       "overdue": "Overdue",
       "cancelled": "Cancelled",
@@ -148,6 +168,7 @@
       "quantity": "Quantity",
       "unitPrice": "Unit Price",
       "vat": "VAT ({{rate}}%)",
+      "status": "Status",
       "errors": {
         "invoiceNumberRequired": "Invoice number is required",
         "dateRequired": "Date is required",
@@ -193,7 +214,8 @@
       "date": "Date",
       "customer": "Customer",
       "amount": "Amount",
-      "actions": "Actions"
+      "actions": "Actions",
+      "status": "Status"
     },
     "actions": {
       "edit": "Edit Invoice",

@@ -54,33 +54,24 @@ namespace EFacture.API.Validators
         }
     }
 
-
     public class ValidationFilter<T> : IEndpointFilter where T : class
     {
         public async ValueTask<object?> InvokeAsync(
             EndpointFilterInvocationContext context,
             EndpointFilterDelegate next)
         {
-            // The first argument should be your model (Invoice)
-            var model = context.Arguments.FirstOrDefault(arg => arg is T) as T;
-
-            if (model is null) return Results.BadRequest();
+            if (context.Arguments.FirstOrDefault(arg => arg is T) is not T model) return Results.BadRequest();
 
             var validator = context.HttpContext.RequestServices.GetRequiredService<IValidator<T>>();
-            var result = await validator.ValidateAsync((T)model);
-            if (!result.IsValid)
-            {
-                var errors = result.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.Select(e => e.ErrorMessage).ToArray()
-                    );
-                return Results.BadRequest(new ValidationProblemDetails(errors));
-            }
-
-            // If validation passed, proceed to the handler
-            return await next(context);
+            var result = await validator.ValidateAsync(model);
+            if (result.IsValid) return await next(context);
+            var errors = result.Errors
+                .GroupBy(e => e.PropertyName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(e => e.ErrorMessage).ToArray()
+                );
+            return Results.BadRequest(new ValidationProblemDetails(errors));
         }
     }
 }

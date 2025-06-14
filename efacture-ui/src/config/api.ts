@@ -3,6 +3,8 @@ export const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
 export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: `${API_BASE_URL}/auth/login`,
+    REGISTER: `${API_BASE_URL}/auth/register`,
+    USERS: `${API_BASE_URL}/auth/users`,
   },
   INVOICES: {
     LIST: `${API_BASE_URL}/invoices`,

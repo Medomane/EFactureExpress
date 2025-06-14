@@ -4,6 +4,7 @@ namespace EFacture.API.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+        public Guid CompanyId { get; set; }
+        public Company? Company { get; set; }
     }
 }

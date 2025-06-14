@@ -21,10 +21,18 @@ const ImportCSV: React.FC<ImportCSVProps> = ({ onImport, loading = false }) => {
 
     if (file.type !== 'text/csv') {
       setError(t('errors.invalidFileType'));
+      // Reset the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       return;
     }
 
     onImport(file);
+    // Reset the file input after attempting to import
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return (

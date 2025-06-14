@@ -1,6 +1,5 @@
 {
   "common": {
-    "signIn": "Connectez-vous à votre compte",
     "email": "Adresse e-mail",
     "password": "Mot de passe",
     "signInButton": "Se connecter",
@@ -40,18 +39,32 @@
     "fileType": "Type de fichier",
     "maxSize": "Taille maximale",
     "upload": "Télécharger",
-    "processing": "Traitement en cours...",
+    "processing": "Traitement...",
     "success": "Succès",
-    "warning": "Attention",
+    "warning": "Avertissement",
     "info": "Information",
     "saving": "Enregistrement...",
     "saveChanges": "Enregistrer les modifications",
     "createInvoice": "Créer une facture",
     "welcomeMessage": "Bienvenue sur EFacture - Votre système de gestion de factures",
-    "emailPlaceholder": "Entrez votre email",
+    "emailPlaceholder": "Entrez votre e-mail",
     "passwordPlaceholder": "Entrez votre mot de passe",
     "signingIn": "Connexion en cours...",
-    "refresh": "Actualiser"
+    "refresh": "Actualiser",
+    "register": "S'inscrire",
+    "registerButton": "S'inscrire",
+    "registering": "Inscription en cours...",
+    "companyName": "Nom de l'entreprise",
+    "companyNamePlaceholder": "Entrez le nom de votre entreprise",
+    "taxId": "Numéro de TVA",
+    "taxIdPlaceholder": "Entrez votre numéro de TVA",
+    "address": "Adresse",
+    "addressPlaceholder": "Entrez l'adresse de votre entreprise",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "signIn": "Se connecter"
   },
   "errors": {
     "invalidCredentials": "Identifiants invalides",
@@ -63,7 +76,7 @@
     "failedToImportCSV": "Échec de l'importation du CSV",
     "failedToUpdateInvoice": "Impossible de mettre à jour la facture : ID manquant",
     "applicationError": "Erreur d'application",
-    "somethingWentWrong": "Une erreur est survenue dans l'application. Veuillez rafraîchir la page.",
+    "somethingWentWrong": "Une erreur est survenue. Veuillez réessayer.",
     "invalidFileType": "Type de fichier invalide. Veuillez télécharger un fichier CSV.",
     "fileTooLarge": "Le fichier est trop volumineux. Taille maximale : {{size}}MB.",
     "requiredField": "Ce champ est obligatoire",
@@ -74,7 +87,13 @@
     "serverError": "Erreur serveur. Veuillez réessayer plus tard.",
     "unauthorized": "Accès non autorisé. Veuillez vous reconnecter.",
     "bulkActionFailed": "Échec de {{action}} des factures : {{error}}",
-    "unknown": "Erreur inconnue"
+    "unknown": "Erreur inconnue",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+    "registrationFailed": "Échec de l'inscription. Veuillez réessayer.",
+    "emailAlreadyExists": "Cette adresse e-mail est déjà enregistrée.",
+    "taxIdAlreadyExists": "Ce numéro de TVA est déjà enregistré.",
+    "databaseError": "Une erreur de base de données est survenue. Veuillez réessayer.",
+    "validationFailed": "Veuillez corriger les erreurs de validation ci-dessous."
   },
   "success": {
     "invoiceCreated": "Facture créée avec succès",
@@ -120,6 +139,7 @@
     "status": {
       "draft": "Brouillon",
       "pending": "Prêt",
+      "ready": "Prêt",
       "paid": "Payée",
       "overdue": "En retard",
       "cancelled": "Annulée",
@@ -148,6 +168,7 @@
       "quantity": "Quantité",
       "unitPrice": "Prix unitaire",
       "vat": "TVA ({{rate}}%)",
+      "status": "Statut",
       "errors": {
         "invoiceNumberRequired": "Le numéro de facture est requis",
         "dateRequired": "La date est requise",
@@ -193,7 +214,8 @@
       "date": "Date",
       "customer": "Client",
       "amount": "Montant",
-      "actions": "Actions"
+      "actions": "Actions",
+      "status": "Statut"
     },
     "actions": {
       "edit": "Modifier la facture",

@@ -3,6 +3,7 @@ import { Invoice, NewInvoice } from '../types';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import InvoiceForm from './InvoiceForm';
+import StatusBadge from './StatusBadge';
 
 interface InvoiceListProps {
   invoices: Invoice[];
@@ -46,7 +47,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedInvoices, setSelectedInvoices] = useState<Set<number>>(new Set());
-  const [showBulkActions, setShowBulkActions] = useState(false);
+  const [, setShowBulkActions] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState<{
     type: 'submit' | 'delete';
     count: number;
@@ -62,6 +63,8 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
     amountFrom: '',
     amountTo: ''
   });
+
+  const isAdmin = localStorage.getItem("userRole") === "Admin";
 
   const handleSort = (field: keyof Invoice) => {
     if (field === sortField) {
@@ -133,7 +136,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       const readyInvoices = filteredAndSortedInvoices
-        .filter(inv => inv.status === 0)
+        .filter(inv => inv.status === 1)
         .map(inv => inv.id);
       setSelectedInvoices(new Set(readyInvoices));
     } else {
@@ -143,7 +146,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
 
   const handleSelectInvoice = (id: number, status: number) => {
     const newSelected = new Set(selectedInvoices);
-    if (status === 0) { // Only allow selecting ready invoices
+    if (status === 1) { // Only allow selecting ready invoices
       if (newSelected.has(id)) {
         newSelected.delete(id);
       } else {
@@ -213,10 +216,10 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
     setShowInvoiceForm(true);
   };
 
-  const handleCreateInvoice = () => {
+  /*const handleCreateInvoice = () => {
     setEditingInvoice(undefined);
     setShowInvoiceForm(true);
-  };
+  };*/
 
   const handleInvoiceFormSubmit = async (invoice: NewInvoice) => {
     if (editingInvoice) {
@@ -279,11 +282,11 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
   return (
     <div className="space-y-4">
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-600 flex items-center gap-2">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-600 flex items-start gap-2">
+          <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          {error}
+          <div className="whitespace-pre-line">{error}</div>
         </div>
       )}
 
@@ -398,18 +401,20 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                onClick={handleBulkSubmit}
-                disabled={disabled}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors ${
-                  disabled ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-                {t('invoice.bulk.submit')}
-              </button>
+              {isAdmin && (
+                <button
+                  onClick={handleBulkSubmit}
+                  disabled={disabled}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors ${
+                    disabled ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                  </svg>
+                  {t('invoice.bulk.submit')}
+                </button>
+              )}
               <button
                 onClick={handleBulkDelete}
                 disabled={disabled}
@@ -451,7 +456,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
                     <input
                       type="checkbox"
                       className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      checked={selectedInvoices.size === filteredAndSortedInvoices.filter(inv => inv.status === 0).length}
+                      checked={selectedInvoices.size === filteredAndSortedInvoices.filter(inv => inv.status === 1).length}
                       onChange={handleSelectAll}
                     />
                   </th>
@@ -511,6 +516,20 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
                       )}
                     </div>
                   </th>
+                  <th 
+                    scope="col" 
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    onClick={() => handleSort('status')}
+                  >
+                    <div className="flex items-center gap-2">
+                      {t('invoice.list.status')}
+                      {sortField === 'status' && (
+                        <svg className={`w-4 h-4 ${sortDirection === 'asc' ? 'transform rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      )}
+                    </div>
+                  </th>
                   <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t('invoice.list.actions')}
                   </th>
@@ -529,7 +548,7 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
                           className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                           checked={selectedInvoices.has(invoice.id)}
                           onChange={() => handleSelectInvoice(invoice.id, invoice.status)}
-                          disabled={invoice.status !== 0}
+                          disabled={invoice.status !== 1}
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -548,34 +567,47 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
                           {formatCurrency(invoice.total)}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={invoice.status} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center justify-end gap-2">
-                          {invoice.status === 0 && (
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleEditInvoice(invoice);
                               }}
-                              disabled={disabled}
+                            disabled={invoice.status === 2}
                               className={`text-blue-600 hover:text-blue-900 ${
-                                disabled ? 'opacity-50 cursor-not-allowed' : ''
+                              invoice.status === 2 ? 'opacity-50 cursor-not-allowed' : ''
                               }`}
                               title={t('invoice.actions.edit')}
                             >
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2.5 2.5 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                               </svg>
                             </button>
-                          )}
-                          {invoice.status === 0 ? (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDownloadPdf(invoice.id);
+                            }}
+                            className="text-gray-600 hover:text-gray-900"
+                            title={t('invoice.actions.download')}
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                          </button>
+                          {isAdmin && (
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleSubmit(invoice.id);
                               }}
-                              disabled={disabled}
+                              disabled={invoice.status !== 1}
                               className={`text-green-600 hover:text-green-900 ${
-                                disabled ? 'opacity-50 cursor-not-allowed' : ''
+                                invoice.status !== 1 ? 'opacity-50 cursor-not-allowed' : ''
                               }`}
                               title={t('invoice.actions.submit')}
                             >
@@ -583,37 +615,15 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                               </svg>
                             </button>
-                          ) : (
-                            <div className="text-green-600 p-1" title={t('invoice.status.submitted')}>
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                            </div>
                           )}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onDownloadPdf(invoice.id);
-                            }}
-                            disabled={disabled}
-                            className={`text-blue-600 hover:text-blue-900 ${
-                              disabled ? 'opacity-50 cursor-not-allowed' : ''
-                            }`}
-                            title={t('invoice.actions.download')}
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                          </button>
-                          {invoice.status === 0 && (
                             <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDelete(invoice.id);
                             }}
-                            disabled={disabled}
+                            disabled={invoice.status === 2}
                             className={`text-red-600 hover:text-red-900 ${
-                              disabled ? 'opacity-50 cursor-not-allowed' : ''
+                              invoice.status === 2 ? 'opacity-50 cursor-not-allowed' : ''
                             }`}
                             title={t('invoice.actions.delete')}
                           >
@@ -621,7 +631,6 @@ const InvoiceList: React.FC<InvoiceListProps> = ({
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                           </button>
-                          )}
                         </div>
                       </td>
                     </tr>

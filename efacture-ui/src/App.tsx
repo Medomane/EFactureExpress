@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate, Link, useLocation, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate, NavLink } from "react-router-dom";
 import { Invoice, NewInvoice } from "./types";
 import Dashboard from "./components/Dashboard";
 import InvoiceList from "./components/InvoiceList";
@@ -7,6 +7,7 @@ import CreateInvoice from "./components/CreateInvoice";
 import ImportCSV from "./components/ImportCSV";
 import InvoiceForm from "./components/InvoiceForm";
 import LoginPage from "./components/LoginPage";
+import RegisterPage from "./components/RegisterPage";
 import { API_ENDPOINTS } from "./config/api";
 import { APP_CONFIG } from "./config/app";
 import { Toaster, toast } from 'react-hot-toast';
@@ -42,6 +43,17 @@ function App() {
   const [error, setError] = useState("");
   const [importLoading, setImportLoading] = useState(false);
   const [showInvoiceForm, setShowInvoiceForm] = useState(false);
+
+  // ─── LANGUAGE STATE ───────────────────────────────────────────────────────
+  const [language] = useState(() => {
+    const savedLanguage = localStorage.getItem('language');
+    return savedLanguage || 'fr';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('language', language);
+    i18n.changeLanguage(language);
+  }, [language]);
 
   // ─── FETCH LIST ────────────────────────────────────────────────────────────
   const fetchInvoices = async () => {
@@ -87,9 +99,39 @@ function App() {
       throw new Error(t('errors.invalidCredentials'));
     }
 
+    
+
+    if (!response.ok) {
+      throw new Error(t('errors.invalidCredentials'));
+    }
+
     const data = await response.json();
+    
+    if (!data.token) {
+      throw new Error(t('errors.invalidResponse'));
+    }
+
+    // Extract role from JWT token
+    const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
+    
+    // Get role from claims
+    const roleClaim = tokenPayload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    if (!roleClaim) {
+      throw new Error(t('errors.invalidRole'));
+    }
+
+    // Map the role to our UserRole enum
+    const role = roleClaim === 'Admin' ? 'Admin' : 
+                roleClaim === 'Manager' ? 'Manager' : 
+                roleClaim === 'Clerk' ? 'Clerk' : null;
+    console.log(role);
+    if (!role) {
+      throw new Error(t('errors.invalidRole'));
+    }
+
     localStorage.setItem("token", data.token);
-    setToken(data.token);
+    localStorage.setItem("userRole", role);
+    setToken(data.token);    
   };
 
   const handleLogout = () => {
@@ -195,7 +237,6 @@ function App() {
 
       if (!response.ok) throw new Error("Failed to download PDF");
       const data = await response.json();
-      console.log(data);
       window.open(data.url, '_blank');
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -237,20 +278,50 @@ function App() {
         body: formData,
       });
 
+      const data = await response.json();
+
       if (response.status === 401) {
         localStorage.removeItem("token");
         setToken(null);
         return;
       }
 
-      if (!response.ok) throw new Error(t('errors.failedToImportCSV'));
+      if (!response.ok) {
+        let errorMessages: string[] = [];
+        
+        // Handle general errors
+        if (data.errors && Array.isArray(data.errors)) {
+          errorMessages = [...data.errors];
+        }
+        
+        // Handle row-specific errors
+        if (data.rowErrors && Array.isArray(data.rowErrors)) {
+          const rowErrorMessages = data.rowErrors.map((rowError: { rowNumber: number; errors: string[] }) => {
+            return `Row ${rowError.rowNumber}:\n${rowError.errors.join('\n')}`;
+          });
+          errorMessages = [...errorMessages, ...rowErrorMessages];
+        }
+
+        if (errorMessages.length > 0) {
+          throw new Error(errorMessages.join('\n'));
+        }
+        
+        throw new Error(t('errors.failedToImportCSV'));
+      }
       
       await fetchInvoices();
       toast.success(t('success.csvImported'), { id: toastId });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : t('errors.anErrorOccurred');
       setError(errorMessage);
-      toast.error(`${t('errors.failedToImportCSV')}: ${errorMessage}`, { id: toastId });
+      // If the error message contains multiple lines (from array of errors), show them in a more readable format
+      const displayMessage = errorMessage.includes('\n') 
+        ? `${t('errors.failedToImportCSV')}:\n${errorMessage}`
+        : `${t('errors.failedToImportCSV')}: ${errorMessage}`;
+      toast.error(displayMessage, { 
+        id: toastId,
+        duration: 5000, // Show for 5 seconds since there might be multiple errors
+      });
     } finally {
       setImportLoading(false);
     }
@@ -270,11 +341,10 @@ function App() {
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
                 <img
-                  src={APP_CONFIG.logo}
+                  src={token ? APP_CONFIG.logo : APP_CONFIG.logoH}
                   alt={`${APP_CONFIG.title} Logo`}
-                  className="h-8 w-8 mr-2"
+                  className="h-8 mr-2"
                 />
-                <span className="text-xl font-bold text-gray-900">{APP_CONFIG.title}</span>
               </div>
               {token && (
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -344,11 +414,28 @@ function App() {
           {renderNavbar()}
 
           {!token ? (
-            <LoginPage
-              onLogin={handleLogin}
-              onToggleLanguage={toggleLanguage}
-              currentLanguage={i18n.language}
-            />
+            <Routes>
+              <Route
+                path="/login"
+                element={
+                  <LoginPage
+                    onLogin={handleLogin}
+                    onToggleLanguage={toggleLanguage}
+                    currentLanguage={i18n.language}
+                  />
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <RegisterPage
+                    onToggleLanguage={toggleLanguage}
+                    currentLanguage={i18n.language}
+                  />
+                }
+              />
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </Routes>
           ) : (
             <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
               <Routes>

@@ -16,7 +16,7 @@ export interface InvoiceLine {
     vat: number;
     total: number;
     lines: InvoiceLine[];
-    status: number; // 0 = Ready, 1 = Submitted
+    status: number; // 0 = Draft, 1 = Ready, 2 = Submitted
   }
   
   // For creating, we don't send `id` or `invoiceId`
@@ -34,7 +34,7 @@ export interface InvoiceLine {
     subTotal: number;
     vat: number;
     total: number;
-    status: number; // 0 = Ready, 1 = Submitted
+    status: number; // 0 = Draft, 1 = Ready, 2 = Submitted
     lines: NewLine[];
   }
 
