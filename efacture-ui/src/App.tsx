@@ -8,12 +8,14 @@ import ImportCSV from "./components/ImportCSV";
 import InvoiceForm from "./components/InvoiceForm";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
+import Users from "./components/Users";
 import { API_ENDPOINTS } from "./config/api";
 import { APP_CONFIG } from "./config/app";
 import { Toaster, toast } from 'react-hot-toast';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorPage from './components/ErrorPage';
 import { useTranslation } from 'react-i18next';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -99,19 +101,13 @@ function App() {
       throw new Error(t('errors.invalidCredentials'));
     }
 
-    
-
-    if (!response.ok) {
-      throw new Error(t('errors.invalidCredentials'));
-    }
-
     const data = await response.json();
     
     if (!data.token) {
       throw new Error(t('errors.invalidResponse'));
     }
 
-    // Extract role from JWT token
+    // Extract role and userId from JWT token
     const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
     
     // Get role from claims
@@ -120,17 +116,23 @@ function App() {
       throw new Error(t('errors.invalidRole'));
     }
 
+    // Get userId from claims
+    const userId = tokenPayload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+    if (!userId) {
+      throw new Error(t('errors.invalidUserId'));
+    }
+
     // Map the role to our UserRole enum
     const role = roleClaim === 'Admin' ? 'Admin' : 
                 roleClaim === 'Manager' ? 'Manager' : 
                 roleClaim === 'Clerk' ? 'Clerk' : null;
-    console.log(role);
     if (!role) {
       throw new Error(t('errors.invalidRole'));
     }
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("userRole", role);
+    localStorage.setItem("userId", userId);
     setToken(data.token);    
   };
 
@@ -334,6 +336,11 @@ function App() {
 
   // ─── RENDER NAVBAR ─────────────────────────────────────────────────────────
   const renderNavbar = () => {
+    const userRole = localStorage.getItem('userRole');
+    const isAdmin = userRole === 'Admin';
+    const isManager = userRole === 'Manager';
+    const canAccessUsers = isAdmin || isManager;
+
     return (
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -372,6 +379,20 @@ function App() {
                   >
                     {t('common.invoices')}
                   </NavLink>
+                  {canAccessUsers && (
+                    <NavLink
+                      to="/users"
+                      className={({ isActive }) =>
+                        `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                          isActive
+                            ? "border-blue-500 text-gray-900"
+                            : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                        }`
+                      }
+                    >
+                      {t('common.users')}
+                    </NavLink>
+                  )}
                 </div>
               )}
             </div>
@@ -442,62 +463,78 @@ function App() {
                 <Route
                   path="/"
                   element={
-                    <Dashboard
-                      invoices={invoices}
-                      loading={loading}
-                      error={error}
-                      onRefresh={fetchInvoices}
-                    />
+                    <ProtectedRoute>
+                      <Dashboard
+                        invoices={invoices}
+                        loading={loading}
+                        error={error}
+                        onRefresh={fetchInvoices}
+                      />
+                    </ProtectedRoute>
                   }
                 />
                 <Route
                   path="/invoices"
                   element={
-                    <div>
-                      <div className="mb-6 flex items-center justify-between">
-                        <ImportCSV onImport={handleImportCSV} loading={importLoading} />
-                        <button
-                          onClick={() => setShowInvoiceForm(true)}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors ${
-                            importLoading ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
-                          }`}
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                          </svg>
-                          {t('common.newInvoice')}
-                        </button>
-                      </div>
+                    <ProtectedRoute>
+                      <div>
+                        <div className="mb-6 flex items-center justify-between">
+                          <ImportCSV onImport={handleImportCSV} loading={importLoading} />
+                          <button
+                            onClick={() => setShowInvoiceForm(true)}
+                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors ${
+                              importLoading ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
+                            }`}
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                            {t('common.newInvoice')}
+                          </button>
+                        </div>
 
-                      <div className="bg-white rounded-lg border border-gray-200">
-                        <InvoiceList 
-                          invoices={invoices} 
-                          loading={loading} 
-                          error={error} 
-                          onDelete={handleDeleteInvoice}
-                          onDownloadPdf={handleDownloadPdf}
-                          onSubmit={handleSubmitInvoice}
-                          onCreateInvoice={handleCreateInvoice}
-                          onUpdateInvoice={handleUpdateInvoice}
-                          disabled={importLoading}
-                          importLoading={importLoading}
-                          onImportCSV={handleImportCSV}
-                        />
-                      </div>
+                        <div className="bg-white rounded-lg border border-gray-200">
+                          <InvoiceList 
+                            invoices={invoices} 
+                            loading={loading} 
+                            error={error} 
+                            onDelete={handleDeleteInvoice}
+                            onDownloadPdf={handleDownloadPdf}
+                            onSubmit={handleSubmitInvoice}
+                            onCreateInvoice={handleCreateInvoice}
+                            onUpdateInvoice={handleUpdateInvoice}
+                            disabled={importLoading}
+                            importLoading={importLoading}
+                            onImportCSV={handleImportCSV}
+                          />
+                        </div>
 
-                      {showInvoiceForm && (
-                        <InvoiceForm
-                          onSubmit={handleCreateInvoice}
-                          onClose={() => setShowInvoiceForm(false)}
-                          disabled={importLoading}
-                        />
-                      )}
-                    </div>
-                  } 
+                        {showInvoiceForm && (
+                          <InvoiceForm
+                            onSubmit={handleCreateInvoice}
+                            onClose={() => setShowInvoiceForm(false)}
+                            disabled={importLoading}
+                          />
+                        )}
+                      </div>
+                    </ProtectedRoute>
+                  }
                 />
-                <Route 
+                <Route
                   path="/invoices/create" 
-                  element={<CreateInvoice onSubmit={handleCreateInvoice} disabled={importLoading} />} 
+                  element={
+                    <ProtectedRoute>
+                      <CreateInvoice onSubmit={handleCreateInvoice} disabled={importLoading} />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/users"
+                  element={
+                    <ProtectedRoute allowedRoles={['Admin', 'Manager']}>
+                      <Users token={token} />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

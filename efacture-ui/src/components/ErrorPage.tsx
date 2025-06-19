@@ -40,21 +40,13 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
               )}
             </div>
           )}
-          <div className="mt-4 space-x-4">
+          <div className="mt-4">
             <button
-              onClick={() => window.location.reload()}
+              onClick={onRetry || (() => window.location.reload())}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             >
               {t('common.retry')}
             </button>
-            {onRetry && (
-              <button
-                onClick={onRetry}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-              >
-                {t('common.retry')}
-              </button>
-            )}
           </div>
         </div>
       </div>

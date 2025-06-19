@@ -93,7 +93,13 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         });
 }
 
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOrManager", policy => policy.RequireRole("Admin", "Manager"));
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+});
+
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -128,6 +134,7 @@ app.UseExceptionHandler(errorApp =>
     });
 });
 
+//app.UseRouting();
 app.UseCors("AllowReactDev");
 
 app.UseAuthentication();
@@ -142,8 +149,7 @@ using (var scope = app.Services.CreateScope())
     var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     foreach (var roleName in new[] { "Clerk", "Manager", "Admin" })
     {
-        if (!await roleMgr.RoleExistsAsync(roleName))
-            await roleMgr.CreateAsync(new IdentityRole(roleName));
+        if (!await roleMgr.RoleExistsAsync(roleName)) await roleMgr.CreateAsync(new IdentityRole(roleName));
     }
 }
 
@@ -159,7 +165,8 @@ app.MapGet("/api/invoices", async (EFactureDbContext db, ClaimsPrincipal user) =
         .Include(i => i.Lines)
         .Where(i => i.CompanyId == cid)
         .ToListAsync();
-}).RequireAuthorization();
+})
+    .RequireAuthorization();
 
 app.MapGet("/api/invoices/{id:int}", async (int id, EFactureDbContext db, ClaimsPrincipal user) =>
 {
@@ -186,7 +193,8 @@ app.MapGet("/api/invoices/{id:int}", async (int id, EFactureDbContext db, Claims
         Invoice = invoice,
         StatusHistory = history
     });
-}).RequireAuthorization();
+})
+    .RequireAuthorization();
 
 app.MapPost("/api/invoices", async (Invoice newInvoice, EFactureDbContext db, InvoicePdfService pdfService, ClaimsPrincipal user) =>
 {
@@ -212,7 +220,9 @@ app.MapPost("/api/invoices", async (Invoice newInvoice, EFactureDbContext db, In
     var pdfBytes = await pdfService.GeneratePdfAsync(newInvoice.Id);
     if(pdfBytes != null) await pdfService.UploadPdfToMinioAsync(newInvoice.Id, pdfBytes);
     return Results.Created($"/api/invoices/{newInvoice.Id}", newInvoice);
-}).AddEndpointFilter<ValidationFilter<Invoice>>().RequireAuthorization();
+})
+    .AddEndpointFilter<ValidationFilter<Invoice>>()
+    .RequireAuthorization();
 
 app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbContext db, InvoicePdfService pdfService, ClaimsPrincipal user) =>
 {
@@ -295,7 +305,10 @@ app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbC
     var pdfBytes = await pdfService.GeneratePdfAsync(existingInvoice.Id);
     if (pdfBytes != null) await pdfService.UploadPdfToMinioAsync(existingInvoice.Id, pdfBytes);
     return Results.NoContent();
-}).AddEndpointFilter<ValidationFilter<Invoice>>().RequireAuthorization();
+})
+    .AddEndpointFilter<ValidationFilter<Invoice>>()
+    .RequireAuthorization();
+
 
 app.MapDelete("/api/invoices/{id:int}", async (int id, EFactureDbContext db, ClaimsPrincipal user) =>
 {
@@ -309,7 +322,8 @@ app.MapDelete("/api/invoices/{id:int}", async (int id, EFactureDbContext db, Cla
     db.Invoices.Remove(invoice);
     await db.SaveChangesAsync();
     return Results.NoContent();
-}).RequireAuthorization();
+})
+    .RequireAuthorization();
 
 app.MapPost("/api/invoices/import-csv", async (HttpRequest req, CsvImportService csvService, EFactureDbContext db, InvoicePdfService pdfService, ClaimsPrincipal user) =>
 {
@@ -390,7 +404,8 @@ app.MapPost("/api/invoices/import-csv", async (HttpRequest req, CsvImportService
         if (pdfBytes != null) await pdfService.UploadPdfToMinioAsync(invoice.Id, pdfBytes);
     }
     return Results.Ok(new { Message = "Imported successfully", records.Count });
-}).RequireAuthorization();
+})
+    .RequireAuthorization();
 
 app.MapGet("/api/invoices/{id:int}/pdf-url", async (int id, EFactureDbContext db, IConfiguration config, ClaimsPrincipal user) =>
 {
@@ -426,7 +441,8 @@ app.MapGet("/api/invoices/{id:int}/pdf-url", async (int id, EFactureDbContext db
     {
         return Results.NotFound($"PDF for invoice {id} not found.");
     }
-}).RequireAuthorization();
+})
+    .RequireAuthorization();
 
 app.MapPost("/api/invoices/{id:int}/submit", async (int id, EFactureDbContext db, ClaimsPrincipal user) =>
 {
@@ -456,24 +472,20 @@ app.MapPost("/api/invoices/{id:int}/submit", async (int id, EFactureDbContext db
 
     await db.SaveChangesAsync();
     return Results.Ok(invoice);
-}).RequireAuthorization();
+})
+    .RequireAuthorization();
 
-app.MapPost("/api/auth/register", async (
-        EFactureDbContext db,
-        UserManager<ApplicationUser> userMgr,
-        RoleManager<IdentityRole> roleMgr,
-        RegisterModel model) =>
+//--------Auth
+
+app.MapPost("/api/auth/register", async (EFactureDbContext db, UserManager<ApplicationUser> userMgr, RoleManager<IdentityRole> roleMgr, RegisterModel model) =>
 {
-    // ── 1. Fast pre-checks ──────────────────────────────────────────────
     if (await db.Companies.AnyAsync(c => c.TaxId == model.TaxId)) return Results.Conflict(new { field = "taxId", error = "Tax Id already exists." });
     if (await userMgr.FindByEmailAsync(model.Email) is not null) return Results.Conflict(new { field = "email", error = "Email already in use." });
 
-    // ── 2. Start atomic transaction ─────────────────────────────────────
     await using var tx = await db.Database.BeginTransactionAsync();
 
     try
     {
-        // 2a. Company
         var company = new Company
         {
             Name = model.CompanyName,
@@ -483,7 +495,6 @@ app.MapPost("/api/auth/register", async (
         db.Companies.Add(company);
         await db.SaveChangesAsync();
 
-        // 2b. Admin user
         var user = new ApplicationUser
         {
             UserName = model.Email,
@@ -498,7 +509,6 @@ app.MapPost("/api/auth/register", async (
             return Results.BadRequest(userResult.Errors);
         }
 
-        // 2c. Ensure role, assign
         if (!await roleMgr.RoleExistsAsync("Admin")) await roleMgr.CreateAsync(new IdentityRole("Admin"));
 
         await userMgr.AddToRoleAsync(user, "Admin");
@@ -516,7 +526,8 @@ app.MapPost("/api/auth/register", async (
         await tx.RollbackAsync();
         return Results.Problem(ex.Message, statusCode: 500);
     }
-}).AddEndpointFilter<ValidationFilter<RegisterModel>>();
+})
+    .AddEndpointFilter<ValidationFilter<RegisterModel>>();
 
 app.MapPost("/api/auth/login", async (UserManager<ApplicationUser> userManager, IConfiguration config, LoginModel model) =>
     {
@@ -554,15 +565,17 @@ app.MapPost("/api/auth/login", async (UserManager<ApplicationUser> userManager, 
     .Produces(StatusCodes.Status200OK)
     .Produces(StatusCodes.Status401Unauthorized);
 
+//--------
 
-app.MapGet("/api/auth/users", async (UserManager<ApplicationUser> userManager) =>
+//--------Users CRUD
+
+app.MapGet("/api/users", async (UserManager<ApplicationUser> userManager, ClaimsPrincipal user) =>
 {
-    // Load all users
-    var users = await userManager.Users
+    var cid = GetCompanyId(user)!;
+    var users = await userManager.Users.Where(u => u.CompanyId == cid)
         .Select(u => new { u.Id, u.Email })
         .ToListAsync();
 
-    // For each user, fetch their roles
     var result = new List<object>(users.Count);
     foreach (var u in users)
     {
@@ -577,7 +590,138 @@ app.MapGet("/api/auth/users", async (UserManager<ApplicationUser> userManager) =
     }
 
     return Results.Ok(result);
-});
+})
+    .RequireAuthorization("AdminOrManager");
+
+app.MapGet("/api/users/{id}", async (string id, UserManager<ApplicationUser> userManager, ClaimsPrincipal principal) =>
+    {
+        var cid = GetCompanyId(principal);
+        var user = await userManager.Users
+            .Where(u => u.CompanyId == cid && u.Id == id)
+            .SingleOrDefaultAsync();
+
+        if (user is null) return Results.NotFound();
+
+        var roles = await userManager.GetRolesAsync(user);
+        return Results.Ok(new
+        {
+            user.Id,
+            user.Email,
+            Roles = roles
+        });
+    })
+    .RequireAuthorization("AdminOrManager");
+
+app.MapPost("/api/users", async (UserCreateModel model, ClaimsPrincipal principal, UserManager<ApplicationUser> userMgr, RoleManager<IdentityRole> roleMgr) =>
+    {
+        var callerIsManager = principal.IsInRole("Manager");
+
+        var newRole = model.Role ?? "Clerk";
+        if (newRole == "Admin") return Results.Forbid();
+        if (callerIsManager && newRole == "Manager") return Results.Forbid();
+
+        var companyId = GetCompanyId(principal);
+        var user = new ApplicationUser
+        {
+            UserName = model.Email,
+            Email = model.Email,
+            CompanyId = companyId
+        };
+
+        var createRes = await userMgr.CreateAsync(user, model.Password);
+        if (!createRes.Succeeded) return Results.BadRequest(createRes.Errors);
+
+        if (!await roleMgr.RoleExistsAsync(newRole)) await roleMgr.CreateAsync(new IdentityRole(newRole));
+        await userMgr.AddToRoleAsync(user, newRole);
+
+        return Results.Created($"/api/users/{user.Id}", new { user.Id, user.Email, Role = newRole });
+    })
+    .AddEndpointFilter<ValidationFilter<UserCreateModel>>()
+    .RequireAuthorization("AdminOrManager");
+
+app.MapPut("/api/users/{id}", async (string id, UserUpdateModel model, ClaimsPrincipal caller, UserManager<ApplicationUser> userMgr, RoleManager<IdentityRole> roleMgr) =>
+{
+    var callerId = caller.FindFirstValue(ClaimTypes.NameIdentifier);
+    var callerIsAdmin = caller.IsInRole("Admin");
+    var callerIsManager = caller.IsInRole("Manager");
+    if (!(callerIsAdmin || callerIsManager)) return Results.Forbid();
+
+    var companyId = GetCompanyId(caller);
+    var user = await userMgr.Users.SingleOrDefaultAsync(u => u.Id == id && u.CompanyId == companyId);
+    if (user is null) return Results.NotFound();
+
+    var targetRoles = await userMgr.GetRolesAsync(user);
+    var isTargetAdmin = targetRoles.Contains("Admin");
+
+    if (isTargetAdmin)
+    {
+        if (id != callerId || model.Password == null || model.Email != null || model.Role != null)
+            return Results.Problem(detail: "Primary Admin may only reset their own password (no other fields).",
+                statusCode: StatusCodes.Status403Forbidden);
+
+        var resetToken = await userMgr.GeneratePasswordResetTokenAsync(user);
+        var passRes = await userMgr.ResetPasswordAsync(user, resetToken, model.Password);
+        return !passRes.Succeeded ? Results.BadRequest(passRes.Errors) : Results.NoContent();
+    }
+
+    var hasChanged = false;
+
+    if (model.Email != null && !string.Equals(model.Email, user.Email, StringComparison.OrdinalIgnoreCase))
+    {
+        user.Email = model.Email;
+        user.UserName = model.Email;
+        hasChanged = true;
+    }
+
+    if (model.Password != null)
+    {
+        var token = await userMgr.GeneratePasswordResetTokenAsync(user);
+        var result = await userMgr.ResetPasswordAsync(user, token, model.Password);
+        if (!result.Succeeded) return Results.BadRequest(result.Errors);
+    }
+
+    if (model.Role != null)
+    {
+        if (!callerIsAdmin) return Results.Forbid();
+        if (model.Role == "Admin")
+            return Results.Problem(detail: "Cannot elevate any user to Admin.",
+                statusCode: StatusCodes.Status403Forbidden);
+
+        var current = (await userMgr.GetRolesAsync(user)).Single();
+        if (current != model.Role)
+        {
+            await userMgr.RemoveFromRoleAsync(user, current);
+            if (!await roleMgr.RoleExistsAsync(model.Role)) await roleMgr.CreateAsync(new IdentityRole(model.Role));
+            await userMgr.AddToRoleAsync(user, model.Role);
+        }
+    }
+
+    if (!hasChanged) return Results.NoContent();
+    var upd = await userMgr.UpdateAsync(user);
+    return !upd.Succeeded ? Results.BadRequest(upd.Errors) : Results.NoContent();
+})
+    .AddEndpointFilter<ValidationFilter<UserUpdateModel>>()
+    .RequireAuthorization("AdminOrManager");
+
+app.MapDelete("/api/users/{id}", async (string id, ClaimsPrincipal caller, UserManager<ApplicationUser> userMgr) =>
+{
+    if (!caller.IsInRole("Admin")) return Results.Forbid();
+    var companyId = GetCompanyId(caller);
+    var target = await userMgr.Users.SingleOrDefaultAsync(u => u.Id == id && u.CompanyId == companyId);
+
+    if (target is null) return Results.NotFound();
+    var targetRoles = await userMgr.GetRolesAsync(target);
+    if (targetRoles.Contains("Admin")) return Results.Problem(detail: "Cannot delete the primary Admin account.", statusCode: StatusCodes.Status403Forbidden);
+    if (target.Id == GetUid(caller)) return Results.BadRequest("Cannot delete your own account.");
+
+    var res = await userMgr.DeleteAsync(target);
+    return res.Succeeded ? Results.NoContent() : Results.BadRequest(res.Errors);
+})
+    .RequireAuthorization("Admin");
+
+//--------
+
+
 
 #endregion
 

@@ -64,7 +64,9 @@
     "confirmPasswordPlaceholder": "Confirm your password",
     "noAccount": "Don't have an account?",
     "alreadyHaveAccount": "Already have an account?",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "users": "Users",
+    "create": "Create"
   },
   "errors": {
     "invalidCredentials": "Invalid credentials",
@@ -93,7 +95,13 @@
     "emailAlreadyExists": "This email address is already registered.",
     "taxIdAlreadyExists": "This Tax ID is already registered.",
     "databaseError": "A database error occurred. Please try again.",
-    "validationFailed": "Please fix the validation errors below."
+    "validationFailed": "Please fix the validation errors below.",
+    "cannotUpdateAdmin": "Admin users cannot be modified",
+    "managersCannotChangeRoles": "Managers cannot change user roles",
+    "passwordUpdated": "Password has been updated successfully",
+    "invalidResponse": "Invalid response from server",
+    "invalidRole": "Invalid user role",
+    "invalidUserId": "Invalid user ID"
   },
   "success": {
     "invoiceCreated": "Invoice created successfully",
@@ -104,7 +112,11 @@
     "changesSaved": "Changes saved successfully",
     "fileUploaded": "File uploaded successfully",
     "bulkInvoicesSubmitted": "{{count}} invoices submitted successfully",
-    "bulkInvoicesDeleted": "{{count}} invoices deleted successfully"
+    "bulkInvoicesDeleted": "{{count}} invoices deleted successfully",
+    "userCreated": "New user account has been created successfully",
+    "userUpdated": "User account has been updated successfully",
+    "userDeleted": "User account has been deleted successfully",
+    "passwordUpdated": "Password has been updated successfully"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -249,5 +261,28 @@
     "success": "Import completed successfully",
     "error": "Error during import",
     "importCSV": "Import CSV"
+  },
+  "users": {
+    "title": "Users",
+    "addUser": "Add User",
+    "editUser": "Edit User",
+    "email": "Email",
+    "password": "Password",
+    "newPassword": "New Password",
+    "role": "Role",
+    "passwordRequirements": "Password must be at least 8 characters long",
+    "adminUserNote": "Admin users cannot be modified",
+    "resetOwnPassword": "Reset Own Password",
+    "confirmations": {
+      "deleteUser": "Are you sure you want to delete this user?"
+    }
+  },
+  "roles": {
+    "admin": "Admin",
+    "manager": "Manager",
+    "clerk": "Clerk"
+  },
+  "confirmations": {
+    "deleteUser": "Are you sure you want to delete this user?"
   }
 } 

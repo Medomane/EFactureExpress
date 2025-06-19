@@ -76,7 +76,6 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onToggleLanguage, currentLa
         navigate('/login');
       }
     } catch (err: any) {
-      console.log(err);
       if (err.response?.status === 409) {
         // Handle conflict errors (duplicate email or tax ID)
         const errorData = err.response.data;

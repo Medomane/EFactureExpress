@@ -64,7 +64,9 @@
     "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
     "noAccount": "Vous n'avez pas de compte ?",
     "alreadyHaveAccount": "Vous avez déjà un compte ?",
-    "signIn": "Se connecter"
+    "signIn": "Se connecter",
+    "users": "Utilisateurs",
+    "create": "Créer"
   },
   "errors": {
     "invalidCredentials": "Identifiants invalides",
@@ -93,7 +95,12 @@
     "emailAlreadyExists": "Cette adresse e-mail est déjà enregistrée.",
     "taxIdAlreadyExists": "Ce numéro de TVA est déjà enregistré.",
     "databaseError": "Une erreur de base de données est survenue. Veuillez réessayer.",
-    "validationFailed": "Veuillez corriger les erreurs de validation ci-dessous."
+    "validationFailed": "Veuillez corriger les erreurs de validation ci-dessous.",
+    "cannotUpdateAdmin": "Les administrateurs ne peuvent pas être modifiés",
+    "managersCannotChangeRoles": "Les gestionnaires ne peuvent pas modifier les rôles",
+    "invalidUserId": "ID utilisateur invalide",
+    "invalidResponse": "Réponse invalide du serveur",
+    "invalidRole": "Rôle utilisateur invalide"
   },
   "success": {
     "invoiceCreated": "Facture créée avec succès",
@@ -104,7 +111,11 @@
     "changesSaved": "Modifications enregistrées avec succès",
     "fileUploaded": "Fichier téléchargé avec succès",
     "bulkInvoicesSubmitted": "{{count}} factures soumises avec succès",
-    "bulkInvoicesDeleted": "{{count}} factures supprimées avec succès"
+    "bulkInvoicesDeleted": "{{count}} factures supprimées avec succès",
+    "userCreated": "Utilisateur créé avec succès",
+    "userUpdated": "Utilisateur mis à jour avec succès",
+    "userDeleted": "Utilisateur supprimé avec succès",
+    "passwordUpdated": "Mot de passe mis à jour avec succès"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -248,5 +259,27 @@
     "processing": "Traitement en cours...",
     "success": "Importation terminée avec succès",
     "error": "Erreur lors de l'importation"
+  },
+  "users": {
+    "title": "Gestion des utilisateurs",
+    "addUser": "Ajouter un utilisateur",
+    "editUser": "Modifier l'utilisateur",
+    "email": "Email",
+    "password": "Mot de passe",
+    "role": "Rôle",
+    "resetOwnPassword": "Réinitialiser mon mot de passe",
+    "resetUserPassword": "Réinitialiser le mot de passe",
+    "resettingPasswordFor": "Réinitialisation du mot de passe pour",
+    "newPassword": "Nouveau mot de passe",
+    "passwordRequirements": "Le mot de passe doit contenir au moins 8 caractères",
+    "adminUserNote": "Les administrateurs ne peuvent pas être modifiés"
+  },
+  "roles": {
+    "admin": "Administrateur",
+    "manager": "Gestionnaire",
+    "clerk": "Employé"
+  },
+  "confirmations": {
+    "deleteUser": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?"
   }
 } 
