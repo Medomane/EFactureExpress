@@ -46,7 +46,7 @@
     "saving": "Saving...",
     "saveChanges": "Save Changes",
     "createInvoice": "Create Invoice",
-    "welcomeMessage": "Welcome to EFacture - Your Invoice Management System",
+    "welcomeMessage": "Welcome to EFacture Express - Your Invoice Management System",
     "emailPlaceholder": "Enter your email",
     "passwordPlaceholder": "Enter your password",
     "signingIn": "Signing in...",
@@ -120,7 +120,7 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome to EFacture",
+    "welcome": "Welcome to EFacture Express",
     "summary": "Summary",
     "totalInvoices": "Total Invoices",
     "pendingInvoices": "Pending Invoices",

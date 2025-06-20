@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 import { API_ENDPOINTS } from '../config/api';
+import { decodeJWT } from '../utils/jwt';
 
 interface User {
   id: string;
@@ -73,12 +74,11 @@ const Users = ({ token }: UsersProps) => {
     if (token) {
       fetchUsers();
       // Get current user's role from token
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const roleClaim = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-        setCurrentUserRole(roleClaim);
-      } catch (err) {
-        console.error('Failed to parse token:', err);
+      const decoded = decodeJWT(token);
+      if (decoded && decoded.role) {
+        setCurrentUserRole(decoded.role);
+      } else {
+        setCurrentUserRole('');
       }
     }
   }, [token]);

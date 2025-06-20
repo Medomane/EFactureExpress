@@ -266,9 +266,13 @@ app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbC
     existingInvoice.Date = updated.Date;
     existingInvoice.CustomerName = updated.CustomerName;
     existingInvoice.Status = updated.Status;
-    existingInvoice.SubTotal = updated.SubTotal;
+    //existingInvoice.SubTotal = updated.SubTotal;
     existingInvoice.VAT = updated.VAT;
-    existingInvoice.Total = updated.Total;
+    //existingInvoice.Total = updated.Total;
+
+    existingInvoice.SubTotal = existingInvoice.Lines.Sum(l => l.Quantity * l.UnitPrice);
+    //existingInvoice.VAT = Math.Round(existingInvoice.SubTotal * 0.2m, 2);
+    existingInvoice.Total = existingInvoice.SubTotal + existingInvoice.VAT;
 
     if (existingInvoice.Lines.Any())
     {
@@ -286,9 +290,6 @@ app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbC
         existingInvoice.Lines.Add(newLine);
     }
 
-    /*invoice.SubTotal = invoice.Lines.Sum(l => l.Quantity * l.UnitPrice);
-    invoice.VAT = Math.Round(invoice.SubTotal * 0.2m, 2);
-    invoice.Total = invoice.SubTotal + invoice.VAT;*/
 
 
     var uid = GetUid(user)!;

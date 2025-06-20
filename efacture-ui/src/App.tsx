@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { BrowserRouter, Routes, Route, Navigate, NavLink } from "react-router-dom";
 import { Invoice, NewInvoice } from "./types";
 import Dashboard from "./components/Dashboard";
@@ -16,6 +16,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import ErrorPage from './components/ErrorPage';
 import { useTranslation } from 'react-i18next';
 import ProtectedRoute from './components/ProtectedRoute';
+import { decodeJWT } from "./utils/jwt";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -23,18 +24,12 @@ function App() {
   const [token, setToken] = useState<string | null>(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      try {
-        // Check if token is expired
-        const payload = JSON.parse(atob(storedToken.split('.')[1]));
-        if (payload.exp * 1000 < Date.now()) {
-          localStorage.removeItem("token");
-          return null;
-        }
-        return storedToken;
-      } catch {
+      const decoded = decodeJWT(storedToken);
+      if (!decoded || (decoded.exp && decoded.exp * 1000 < Date.now())) {
         localStorage.removeItem("token");
         return null;
       }
+      return storedToken;
     }
     return null;
   });
@@ -56,6 +51,25 @@ function App() {
     localStorage.setItem('language', language);
     i18n.changeLanguage(language);
   }, [language]);
+
+  // ─── ACCOUNT DROPDOWN ──────────────────────────────────────────────────────
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownOpen]);
+
+  const decoded = token ? decodeJWT(token) : null;
+  const userEmail = decoded?.email || '';
+  const userRole = decoded?.role || localStorage.getItem('userRole');
 
   // ─── FETCH LIST ────────────────────────────────────────────────────────────
   const fetchInvoices = async () => {
@@ -107,32 +121,21 @@ function App() {
       throw new Error(t('errors.invalidResponse'));
     }
 
-    // Extract role and userId from JWT token
-    const tokenPayload = JSON.parse(atob(data.token.split('.')[1]));
-    
-    // Get role from claims
-    const roleClaim = tokenPayload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-    if (!roleClaim) {
+    // Extract user info from JWT token
+    const decoded = decodeJWT(data.token);
+    if (!decoded) {
+      throw new Error(t('errors.invalidResponse'));
+    }
+    if (!decoded.role) {
       throw new Error(t('errors.invalidRole'));
     }
-
-    // Get userId from claims
-    const userId = tokenPayload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-    if (!userId) {
+    if (!decoded.userId) {
       throw new Error(t('errors.invalidUserId'));
     }
 
-    // Map the role to our UserRole enum
-    const role = roleClaim === 'Admin' ? 'Admin' : 
-                roleClaim === 'Manager' ? 'Manager' : 
-                roleClaim === 'Clerk' ? 'Clerk' : null;
-    if (!role) {
-      throw new Error(t('errors.invalidRole'));
-    }
-
     localStorage.setItem("token", data.token);
-    localStorage.setItem("userRole", role);
-    localStorage.setItem("userId", userId);
+    localStorage.setItem("userRole", decoded.role);
+    localStorage.setItem("userId", decoded.userId);
     setToken(data.token);    
   };
 
@@ -336,80 +339,124 @@ function App() {
 
   // ─── RENDER NAVBAR ─────────────────────────────────────────────────────────
   const renderNavbar = () => {
-    const userRole = localStorage.getItem('userRole');
     const isAdmin = userRole === 'Admin';
     const isManager = userRole === 'Manager';
     const canAccessUsers = isAdmin || isManager;
 
     return (
-      <nav className="bg-white shadow-sm">
+      <nav className="bg-gradient-to-r from-white to-blue-50 shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex">
+            <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <img
                   src={token ? APP_CONFIG.logo : APP_CONFIG.logoH}
                   alt={`${APP_CONFIG.title} Logo`}
-                  className="h-8 mr-2"
+                  className="h-8 w-auto"
                 />
               </div>
               {token && (
-                <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <div className="hidden sm:ml-8 sm:flex sm:space-x-2">
                   <NavLink
                     to="/"
                     className={({ isActive }) =>
-                      `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                      `inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
                         isActive
-                          ? "border-blue-500 text-gray-900"
-                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                          ? "bg-blue-50 text-blue-700 shadow-sm"
+                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                       }`
                     }
                   >
+                    <svg className="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
                     {t('common.dashboard')}
                   </NavLink>
                   <NavLink
                     to="/invoices"
                     className={({ isActive }) =>
-                      `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                      `inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
                         isActive
-                          ? "border-blue-500 text-gray-900"
-                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                          ? "bg-blue-50 text-blue-700 shadow-sm"
+                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                       }`
                     }
                   >
+                    <svg className="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
                     {t('common.invoices')}
                   </NavLink>
                   {canAccessUsers && (
                     <NavLink
                       to="/users"
                       className={({ isActive }) =>
-                        `inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                        `inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
                           isActive
-                            ? "border-blue-500 text-gray-900"
-                            : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                            ? "bg-blue-50 text-blue-700 shadow-sm"
+                            : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                         }`
                       }
                     >
+                      <svg className="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
                       {t('common.users')}
                     </NavLink>
                   )}
                 </div>
               )}
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <button
                 onClick={toggleLanguage}
-                className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                className="px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-md border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 {i18n.language === 'en' ? 'FR' : 'EN'}
               </button>
               {token && (
-                <button
-                  onClick={handleLogout}
-                  className="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  {t('common.logout')}
-                </button>
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setDropdownOpen((open) => !open)}
+                    className="flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-md border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    aria-haspopup="true"
+                    aria-expanded={dropdownOpen}
+                  >
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <span className="max-w-[150px] truncate">{userEmail}</span>
+                    <svg className={`w-5 h-5 text-gray-400 transition-transform duration-150 ${dropdownOpen ? 'transform rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {dropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 animate-fadeIn">
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <div className="font-medium text-gray-900 truncate">{userEmail}</div>
+                        <div className="text-sm text-gray-500 mt-0.5 flex items-center">
+                          <span className={`inline-block w-2 h-2 rounded-full mr-2 ${
+                            userRole === 'Admin' ? 'bg-indigo-400' :
+                            userRole === 'Manager' ? 'bg-amber-400' :
+                            'bg-green-400'
+                          }`}></span>
+                          <span className="capitalize">{userRole}</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 transition-colors duration-150"
+                      >
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
+                        </svg>
+                        <span>{t('common.logout')}</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </div>

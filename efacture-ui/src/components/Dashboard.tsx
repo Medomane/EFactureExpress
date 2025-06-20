@@ -67,10 +67,12 @@ const Dashboard: React.FC<DashboardProps> = ({
   // Calculate statistics
   const totalAmount = invoices.reduce((sum, invoice) => sum + invoice.total, 0);
   const averageAmount = invoices.length > 0 ? totalAmount / invoices.length : 0;
-  const readyInvoices = invoices.filter(inv => inv.status === 0);
-  const submittedInvoices = invoices.filter(inv => inv.status === 1);
+  const readyInvoices = invoices.filter(inv => inv.status === 1);
+  const submittedInvoices = invoices.filter(inv => inv.status === 2);
+  const draftInvoices = invoices.filter(inv => inv.status === 0);
   const readyAmount = readyInvoices.reduce((sum, inv) => sum + inv.total, 0);
   const submittedAmount = submittedInvoices.reduce((sum, inv) => sum + inv.total, 0);
+  const draftAmount = draftInvoices.reduce((sum, inv) => sum + inv.total, 0);
 
   // Get monthly statistics
   const monthlyStats = invoices.reduce((acc, invoice) => {
@@ -115,26 +117,30 @@ const Dashboard: React.FC<DashboardProps> = ({
   };
 
   // Calculate percentages for status distribution
-  const totalInvoices = readyInvoices.length + submittedInvoices.length;
+  const totalInvoices = draftInvoices.length + readyInvoices.length + submittedInvoices.length;
+  const draftPercentage = totalInvoices > 0 ? (draftInvoices.length / totalInvoices) * 100 : 0;
   const readyPercentage = totalInvoices > 0 ? (readyInvoices.length / totalInvoices) * 100 : 0;
   const submittedPercentage = totalInvoices > 0 ? (submittedInvoices.length / totalInvoices) * 100 : 0;
 
   // Prepare data for status pie chart
   const statusData = {
     labels: [
+      `${t('invoice.status.draft')} (${draftPercentage.toFixed(1)}%)`,
       `${t('invoice.status.pending')} (${readyPercentage.toFixed(1)}%)`,
       `${t('invoice.status.submitted')} (${submittedPercentage.toFixed(1)}%)`,
     ],
     datasets: [
       {
-        data: [readyInvoices.length, submittedInvoices.length],
+        data: [draftInvoices.length, readyInvoices.length, submittedInvoices.length],
         backgroundColor: [
-          'rgba(234, 179, 8, 0.8)',
-          'rgba(34, 197, 94, 0.8)',
+          'rgba(156, 163, 175, 0.8)',  // gray for draft
+          'rgba(234, 179, 8, 0.8)',    // yellow for ready
+          'rgba(34, 197, 94, 0.8)',    // green for submitted
         ],
         borderColor: [
-          'rgb(234, 179, 8)',
-          'rgb(34, 197, 94)',
+          'rgb(156, 163, 175)',  // gray for draft
+          'rgb(234, 179, 8)',    // yellow for ready
+          'rgb(34, 197, 94)',    // green for submitted
         ],
         borderWidth: 1,
       },
@@ -291,15 +297,16 @@ const Dashboard: React.FC<DashboardProps> = ({
 
         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200">
           <div className="flex items-center">
-            <div className="p-3 rounded-full bg-purple-50 text-purple-600">
+            <div className="p-3 rounded-full bg-gray-50 text-gray-600">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </div>
             <div className="ml-4">
-              <h2 className="text-sm font-medium text-gray-600">{t('dashboard.averageAmount')}</h2>
-              <p className="text-2xl font-semibold text-gray-900">
-                {formatCurrency(averageAmount)}
+              <h2 className="text-sm font-medium text-gray-600">{t('invoice.status.draft')}</h2>
+              <p className="text-2xl font-semibold text-gray-900">{draftInvoices.length}</p>
+              <p className="text-sm text-gray-500">
+                {formatCurrency(draftAmount)}
               </p>
             </div>
           </div>

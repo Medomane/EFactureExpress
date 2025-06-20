@@ -46,7 +46,7 @@
     "saving": "Enregistrement...",
     "saveChanges": "Enregistrer les modifications",
     "createInvoice": "Créer une facture",
-    "welcomeMessage": "Bienvenue sur EFacture - Votre système de gestion de factures",
+    "welcomeMessage": "Bienvenue sur EFacture Express - Votre système de gestion de factures",
     "emailPlaceholder": "Entrez votre e-mail",
     "passwordPlaceholder": "Entrez votre mot de passe",
     "signingIn": "Connexion en cours...",
@@ -119,7 +119,7 @@
   },
   "dashboard": {
     "title": "Tableau de bord",
-    "welcome": "Bienvenue sur EFacture",
+    "welcome": "Bienvenue sur EFacture Express",
     "summary": "Résumé",
     "totalInvoices": "Total des factures",
     "pendingInvoices": "Factures en attente",
