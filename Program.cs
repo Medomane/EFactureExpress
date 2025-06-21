@@ -340,11 +340,12 @@ app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbC
 app.MapDelete("/api/invoices/{id:int}", async (int id, EFactureDbContext db, ClaimsPrincipal user) =>
 {
     var cid = GetCompanyId(user);
-    var invoice = await db.Invoices.FirstOrDefaultAsync(i =>
-        i.Id == id &&
-        i.CompanyId == cid
-    );
+    var invoice = await db.Invoices.FirstOrDefaultAsync(i => i.Id == id && i.CompanyId == cid);
     if (invoice is null) return Results.NotFound();
+
+    if (invoice.Status == InvoiceStatus.Submitted) return Results.Forbid();
+
+    if (user.IsInRole("Clerk") && invoice.Status != InvoiceStatus.Draft) return Results.Forbid();
 
     db.Invoices.Remove(invoice);
     await db.SaveChangesAsync();
