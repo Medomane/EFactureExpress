@@ -32,7 +32,7 @@ services:
 
     frontend:
         build:
-            context: ./efacture-ui
+            context: ../EFacture.UI
             dockerfile: Dockerfile
         depends_on:
             - webapi
