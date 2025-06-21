@@ -162,8 +162,28 @@ app.MapGet("/api/invoices", async (EFactureDbContext db, ClaimsPrincipal user) =
 {
     var cid = GetCompanyId(user);
     return await db.Invoices
-        .Include(i => i.Lines)
         .Where(i => i.CompanyId == cid)
+        .Include(i => i.Lines)
+        .Include(i => i.CreatedBy)
+        .Select(i => new
+        {
+            i.Id,
+            i.InvoiceNumber,
+            i.Date,
+            i.CustomerName,
+            i.SubTotal,
+            i.VAT,
+            i.Total,
+            i.Status,
+            i.Lines,
+            i.CreatedAt,
+            CreatedBy = new
+            {
+                i.CreatedById,
+                Name = i.CreatedBy!.UserName,
+                Email = i.CreatedBy.Email
+            }
+        })
         .ToListAsync();
 })
     .RequireAuthorization();
@@ -200,12 +220,17 @@ app.MapPost("/api/invoices", async (Invoice newInvoice, EFactureDbContext db, In
 {
     var cid = GetCompanyId(user);
     newInvoice.Status = InvoiceStatus.Draft;
+
+    var uid = GetUid(user)!;
+
+    newInvoice.CreatedById = uid;
+    newInvoice.CreatedAt = DateTime.UtcNow;
+    newInvoice.UpdatedAt = DateTime.UtcNow;
     newInvoice.CompanyId = cid;
     db.Invoices.Add(newInvoice);
     await db.SaveChangesAsync();
 
 
-    var uid = GetUid(user)!;
     db.InvoiceStatusHistories.Add(new InvoiceStatusHistory
     {
         InvoiceId = newInvoice.Id,
@@ -291,7 +316,6 @@ app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbC
     }
 
 
-
     var uid = GetUid(user)!;
     db.InvoiceStatusHistories.Add(new InvoiceStatusHistory
     {
@@ -301,6 +325,8 @@ app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbC
         ChangedBy = uid,
         ChangedAt = DateTime.UtcNow
     });
+
+    existingInvoice.UpdatedAt = DateTime.UtcNow;
 
     await db.SaveChangesAsync();
     var pdfBytes = await pdfService.GeneratePdfAsync(existingInvoice.Id);
@@ -370,6 +396,7 @@ app.MapPost("/api/invoices/import-csv", async (HttpRequest req, CsvImportService
         });
 
 
+    var uid = GetUid(user)!;
     var cid = GetCompanyId(user);
     var createdInvoices = new List<Invoice>();
     // 2. Group by InvoiceNumber to build Invoice + Lines
@@ -388,7 +415,10 @@ app.MapPost("/api/invoices/import-csv", async (HttpRequest req, CsvImportService
                 Quantity = r.Quantity,
                 UnitPrice = r.UnitPrice
             }).ToList(),
-            CompanyId = cid
+            CompanyId = cid,
+            CreatedById = uid,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         invoice.SubTotal = invoice.Lines.Sum(l => l.Quantity * l.UnitPrice);
         invoice.VAT = Math.Round(invoice.SubTotal * 0.2m, 2);

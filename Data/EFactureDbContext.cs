@@ -17,6 +17,16 @@ namespace EFacture.API.Data
         protected override void OnModelCreating(ModelBuilder mb)
         {
             base.OnModelCreating(mb);
+
+
+            mb.Entity<Invoice>()
+                .Property(i => i.CreatedAt)
+                .HasColumnType("datetime");
+
+            mb.Entity<Invoice>()
+                .Property(i => i.UpdatedAt)
+                .HasColumnType("datetime");
+
             mb.Entity<Invoice>()
                 .HasOne(i => i.Company)
                 .WithMany(c => c.Invoices)
