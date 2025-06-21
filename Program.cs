@@ -530,11 +530,28 @@ app.MapPost("/api/auth/register", async (EFactureDbContext db, UserManager<Appli
 })
     .AddEndpointFilter<ValidationFilter<RegisterModel>>();
 
-app.MapPost("/api/auth/login", async (UserManager<ApplicationUser> userManager, IConfiguration config, LoginModel model) =>
+app.MapPost("/api/auth/login", async (EFactureDbContext db, UserManager<ApplicationUser> userManager, IConfiguration config, LoginModel model) =>
     {
         var user = await userManager.FindByEmailAsync(model.Email);
         if (user == null || !await userManager.CheckPasswordAsync(user, model.Password))
             return Results.Unauthorized();
+
+        var company = await db.Companies
+            .Where(c => c.Id == user.CompanyId)
+            .Select(c => new
+            {
+                c.Id,
+                c.Name,
+                c.TaxId,
+                c.Address,
+                c.IsActive,
+                c.IsVerified,
+                c.CreatedAt,
+                c.UpdatedAt
+            })
+            .FirstOrDefaultAsync();
+
+        if (company is null) return Results.Problem("Company not found", statusCode: StatusCodes.Status500InternalServerError);
 
         var jwtKey = config["Jwt:Key"]!;
         var jwtIssuer = config["Jwt:Issuer"]!;
@@ -560,7 +577,11 @@ app.MapPost("/api/auth/login", async (UserManager<ApplicationUser> userManager, 
             signingCredentials: credentials
         );
 
-        return Results.Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+        return Results.Ok(new
+        {
+            token = new JwtSecurityTokenHandler().WriteToken(token),
+            company
+        });
     })
     .Accepts<LoginModel>("application/json")
     .Produces(StatusCodes.Status200OK)
