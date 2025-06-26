@@ -48,7 +48,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<InvoiceValidator>();
 
-builder.Services.AddDbContext<EFactureDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<EFactureDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
@@ -224,6 +224,7 @@ app.MapPost("/api/invoices", async (Invoice newInvoice, EFactureDbContext db, In
     var uid = GetUid(user)!;
 
     newInvoice.CreatedById = uid;
+    newInvoice.Date = DateTime.SpecifyKind(newInvoice.Date, DateTimeKind.Utc);
     newInvoice.CreatedAt = DateTime.UtcNow;
     newInvoice.UpdatedAt = DateTime.UtcNow;
     newInvoice.CompanyId = cid;
@@ -279,11 +280,15 @@ app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbC
     if (updated.Status != existingInvoice.Status)
     {
         if (isClerk) return Results.Forbid();
+        if (updated.Status == InvoiceStatus.Submitted) return Results.Forbid();
+        if (isManager)
+        {
+            var allowed =
+                (existingInvoice.Status == InvoiceStatus.Draft && updated.Status == InvoiceStatus.Ready) ||
+                (existingInvoice.Status == InvoiceStatus.Ready && updated.Status == InvoiceStatus.Draft);
 
-        if (isManager && !(existingInvoice.Status == InvoiceStatus.Draft && updated.Status == InvoiceStatus.Ready)) return Results.Forbid();
-
-        if (isAdmin && !((existingInvoice.Status == InvoiceStatus.Draft && updated.Status == InvoiceStatus.Ready) || (existingInvoice.Status == InvoiceStatus.Ready && updated.Status == InvoiceStatus.Submitted))) return Results.Forbid();
-
+            if (!allowed) return Results.Forbid();
+        }
         if (!(isClerk || isManager || isAdmin)) return Results.Forbid();
     }
 
