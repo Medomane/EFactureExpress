@@ -293,7 +293,7 @@ app.MapPut("/api/invoices/{id:int}", async (int id, Invoice updated, EFactureDbC
     }
 
     existingInvoice.InvoiceNumber = updated.InvoiceNumber;
-    existingInvoice.Date = updated.Date;
+    existingInvoice.Date = DateTime.SpecifyKind(updated.Date, DateTimeKind.Utc);
     existingInvoice.CustomerName = updated.CustomerName;
     existingInvoice.Status = updated.Status;
     //existingInvoice.SubTotal = updated.SubTotal;
@@ -413,7 +413,7 @@ app.MapPost("/api/invoices/import-csv", async (HttpRequest req, CsvImportService
         var invoice = new Invoice
         {
             InvoiceNumber = first.InvoiceNumber,
-            Date = first.Date,
+            Date = DateTime.SpecifyKind(first.Date, DateTimeKind.Utc),
             CustomerName = first.CustomerName,
             Lines = group.Select(r => new InvoiceLine
             {
